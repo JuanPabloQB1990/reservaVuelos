@@ -1,0 +1,15 @@
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Yuma', 'Levinge', '6200531714', 'ylevinge0@example.com', 'United States', 'New York', '8883 Carberry Center');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Bartholomeus', 'Landal', '0496460129', 'blandal1@wsj.com', 'Argentina', 'Buenos Aires', '28144 5th Point');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Siegfried', 'Ivshin', '8774157175', 'sivshin2@jigsy.com', 'Brazil', 'Sao Paulo', '36 Jackson Center');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Elston', 'Lack', '0286581280', 'elack3@cnet.com', 'Peru', 'lima', '29 Paget Plaza');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Saunderson', 'Gero', '5647408923', 'sgero4@google.co.jp', 'Ecuador', 'Quito', '010 Crescent Oaks Court');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Joel', 'Sagg', '8327352865', 'jsagg5@globo.com', 'Brazil', 'Rio de Janeiro', '3 Jenifer Lane');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Forrest', 'Krammer', '2537295021', 'fkrammer6@dagondesign.com', 'Paraguay', 'Asuncion', '13041 Sullivan Plaza');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Quintus', 'Barclay', '8723224177', 'qbarclay7@simplemachines.org', 'United States', 'Chicago', '7 Linden Pass');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Alvin', 'Mabbott', '2132529639', 'amabbott8@indiegogo.com', 'Japan', 'Tokio', '31 Merry Pass');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Pavlov', 'Spurnier', '7722983006', 'pspurnier9@twitpic.com', 'Francia', 'Paris', '9633 7th Trail');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Elfreda', 'Klaes', '9462853045', 'eklaesa@apache.org', 'España', 'Hüremt', '76186 Monica Lane');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Lisle', 'Antonoczyk', '7594748999', 'lantonoczykb@sun.com', 'Colombia', 'Medellin', '28 Westport Point');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Herta', 'Clemintoni', '4285248751', 'hclemintonic@japanpost.jp', 'Italia', 'Roma', '4 Saint Paul Lane');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Sherwynd', 'Howerd', '2609007566', 'showerdd@nymag.com', 'Italia', 'Napoles', '14202 Bayside Point');
+insert into pasajeros (nombre, apellido, telefono, correo, pais, ciudad, direccion) values ('Bendite', 'Rutty', '1421833425', 'bruttye@sitemeter.com', 'Reino Unido', 'Manchester', '44159 Rutledge Avenue');
