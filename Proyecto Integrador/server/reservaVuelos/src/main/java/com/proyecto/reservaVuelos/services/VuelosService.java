@@ -6,12 +6,15 @@ import com.proyecto.reservaVuelos.models.VuelosModel;
 import com.proyecto.reservaVuelos.repositories.AerolineasRepository;
 import com.proyecto.reservaVuelos.repositories.TipoVueloRepository;
 import com.proyecto.reservaVuelos.repositories.VuelosRepository;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service

@@ -24,7 +24,7 @@ public interface VuelosRepository extends JpaRepository<VuelosModel, Long> {
     @Query(value = "{call insert_vuelo(:origen, :destino, :fechaPartida, :fechaLlegada, :precio, :asientos, :idTipoVuelo, :idAerolinea)}", nativeQuery = true)
     void insertFlight(@Param("origen")String origen, @Param("destino")String destino, @Param("fechaPartida") LocalDateTime fechaPartida, @Param("fechaLlegada")LocalDateTime fechaLlegada, @Param("precio")Double precio,@Param("asientos")Long asientos,@Param("idTipoVuelo")Long idTipoVuelo,@Param("idAerolinea")Long idAerolinea);
 
-    @Query(value = "select * from vuelos where origen = :origen and destino = :destino and fechaPartida = :fechaPartida", nativeQuery = true)
+    @Query(value = "select * from vuelos where origen = :origen and destino = :destino and date(fechaPartida) = :fechaPartida", nativeQuery = true)
     ArrayList<VuelosModel> mostrarVuelosPorCriterioConFechas(@Param("origen")String origen,@Param("destino")String destino,@Param("fechaPartida") LocalDate fechaPartida);
 
 
