@@ -18,10 +18,6 @@ USE `reservas`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping events for database 'reservas'
---
-
---
 -- Dumping routines for database 'reservas'
 --
 /*!50003 DROP FUNCTION IF EXISTS `generarCodigo` */;
@@ -117,4 +113,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-02 11:25:02
+-- Dump completed on 2023-11-02 11:37:39

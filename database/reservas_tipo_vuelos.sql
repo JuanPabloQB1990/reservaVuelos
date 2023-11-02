@@ -30,16 +30,6 @@ CREATE TABLE `tipo_vuelos` (
   PRIMARY KEY (`idTipoVuelo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tipo_vuelos`
---
-
-LOCK TABLES `tipo_vuelos` WRITE;
-/*!40000 ALTER TABLE `tipo_vuelos` DISABLE KEYS */;
-INSERT INTO `tipo_vuelos` VALUES (1,'publico'),(2,'privado');
-/*!40000 ALTER TABLE `tipo_vuelos` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -50,4 +40,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-02 11:25:02
+-- Dump completed on 2023-11-02 11:37:39
