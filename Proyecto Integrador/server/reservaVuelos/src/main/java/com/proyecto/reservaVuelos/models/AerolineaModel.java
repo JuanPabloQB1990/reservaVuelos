@@ -1,48 +1,30 @@
 package com.proyecto.reservaVuelos.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "aerolineas")
+@AllArgsConstructor
+@NoArgsConstructor
 public class AerolineaModel {
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long idAerolinea;
 
-    @Column
     private String nombre;
 
     @OneToMany(mappedBy = "aerolinea", cascade = CascadeType.ALL)
     private List<VuelosModel> vuelos = new ArrayList<>();
 
-    public Long getIdAerolinea() {
-        return idAerolinea;
-    }
 
-    public void setIdAerolinea(Long idAerolinea) {
-        this.idAerolinea = idAerolinea;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public List<VuelosModel> getVuelos() {
-        return vuelos;
-    }
-
-    public void setVuelos(List<VuelosModel> vuelos) {
-        this.vuelos = vuelos;
-        for (VuelosModel vuelo : vuelos) {
-            vuelo.setAerolinea(this);
-        }
-    }
 }

@@ -1,6 +1,6 @@
 package com.proyecto.reservaVuelos.controllers;
 
-import com.proyecto.reservaVuelos.excepcion.UserNotFoundException;
+import com.proyecto.reservaVuelos.excepcion.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,8 +15,8 @@ public class ControllerExcepecion {
     Map<String, String> errorMap;
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(UserNotFoundException.class)
-    public Map<String, String> handleUserNotFoundExcepcion(UserNotFoundException unfe){
+    @ExceptionHandler(EntityNotFoundException.class)
+    public Map<String, String> handleUserNotFoundExcepcion(EntityNotFoundException unfe){
         errorMap = new HashMap<>();
         errorMap.put("errorMessage", unfe.getMessage());
         return errorMap;

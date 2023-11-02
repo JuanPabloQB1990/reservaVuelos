@@ -22,14 +22,14 @@ public interface VuelosRepository extends JpaRepository<VuelosModel, Long> {
     @Transactional
     @Modifying
     @Query(value = "{call insert_vuelo(:origen, :destino, :fechaPartida, :fechaLlegada, :precio, :asientos, :idTipoVuelo, :idAerolinea)}", nativeQuery = true)
-    void insertFlight(@Param("origen")String origen, @Param("destino")String destino, @Param("fechaPartida") LocalDateTime fechaPartida, @Param("fechaLlegada")LocalDateTime fechaLlegada, @Param("precio")Double precio,@Param("asientos")Long asientos,@Param("idTipoVuelo")Long idTipoVuelo,@Param("idAerolinea")Long idAerolinea);
+    void crearVuelo(@Param("origen")String origen, @Param("destino")String destino, @Param("fechaPartida") LocalDateTime fechaPartida, @Param("fechaLlegada")LocalDateTime fechaLlegada, @Param("precio")Double precio,@Param("asientos")Long asientos,@Param("idTipoVuelo")Long idTipoVuelo,@Param("idAerolinea")Long idAerolinea);
 
     @Query(value = "select * from vuelos where origen = :origen and destino = :destino and date(fechaPartida) = :fechaPartida", nativeQuery = true)
-    ArrayList<VuelosModel> mostrarVuelosPorCriterioConFechas(@Param("origen")String origen,@Param("destino")String destino,@Param("fechaPartida") LocalDate fechaPartida);
+    ArrayList<VuelosModel> mostrarVuelosPorCriterioConFecha(@Param("origen")String origen,@Param("destino")String destino,@Param("fechaPartida") LocalDate fechaPartida);
 
 
     @Query(value = "select * from vuelos where origen = :origen and destino = :destino", nativeQuery = true)
-    ArrayList<VuelosModel> mostrarVuelosPorCriterioSinFechas(@Param("origen")String origen,@Param("destino")String destino);
+    ArrayList<VuelosModel> mostrarVuelosPorCriterioSinFecha(@Param("origen")String origen,@Param("destino")String destino);
 
     @Query(value = "select * from vuelos as v where idVuelo = :idVuelo", nativeQuery = true)
     VuelosModel buscarVueloPorId(@Param("idVuelo") Long idVuelo);

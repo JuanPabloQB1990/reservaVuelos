@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Data
@@ -15,8 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "vuelos")
-
 public class VuelosModel {
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long idVuelo;

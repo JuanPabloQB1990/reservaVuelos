@@ -23,9 +23,9 @@ DROP TABLE IF EXISTS `tipo_vuelos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_vuelos` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `idTipoVuelo` bigint NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`idTipoVuelo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -35,7 +35,7 @@ CREATE TABLE `tipo_vuelos` (
 
 LOCK TABLES `tipo_vuelos` WRITE;
 /*!40000 ALTER TABLE `tipo_vuelos` DISABLE KEYS */;
-INSERT INTO `tipo_vuelos` VALUES (1,'ECONOMICA'),(2,'EJECUTIVA');
+INSERT INTO `tipo_vuelos` VALUES (1,'publico'),(2,'privado');
 /*!40000 ALTER TABLE `tipo_vuelos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-13 14:52:52
+-- Dump completed on 2023-11-02 10:58:44

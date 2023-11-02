@@ -13,8 +13,12 @@ import java.util.ArrayList;
 @RequestMapping("/pasajeros")
 public class PasajerosController {
 
+    private PasajerosService pasajerosService;
+
     @Autowired
-    PasajerosService pasajerosService;
+    public PasajerosController(PasajerosService pasajerosService) {
+        this.pasajerosService = pasajerosService;
+    }
 
     @GetMapping
     public ArrayList<PasajerosModel> obtenerPasajeros(){

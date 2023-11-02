@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `pasajeros`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pasajeros` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `idPasajero` bigint NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) DEFAULT NULL,
   `apellido` varchar(255) DEFAULT NULL,
   `telefono` varchar(255) DEFAULT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE `pasajeros` (
   `pais` varchar(255) DEFAULT NULL,
   `ciudad` varchar(255) DEFAULT NULL,
   `direccion` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`idPasajero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-13 14:52:52
+-- Dump completed on 2023-11-02 10:58:45
