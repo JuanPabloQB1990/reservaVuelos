@@ -18,6 +18,150 @@ USE `reservas`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `aerolineas`
+--
+
+DROP TABLE IF EXISTS `aerolineas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `aerolineas` (
+  `idAerolinea` bigint NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`idAerolinea`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aerolineas`
+--
+
+LOCK TABLES `aerolineas` WRITE;
+/*!40000 ALTER TABLE `aerolineas` DISABLE KEYS */;
+INSERT INTO `aerolineas` VALUES (1,'Avianca'),(2,'Easyfly'),(3,'Satena'),(4,'Wingo'),(5,'Ultra Air'),(6,'Viva Air'),(7,'GCA Airlines');
+/*!40000 ALTER TABLE `aerolineas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pasajeros`
+--
+
+DROP TABLE IF EXISTS `pasajeros`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pasajeros` (
+  `idPasajero` bigint NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) DEFAULT NULL,
+  `apellido` varchar(255) DEFAULT NULL,
+  `telefono` varchar(255) DEFAULT NULL,
+  `correo` varchar(255) DEFAULT NULL,
+  `pais` varchar(255) DEFAULT NULL,
+  `ciudad` varchar(255) DEFAULT NULL,
+  `direccion` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`idPasajero`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pasajeros`
+--
+
+LOCK TABLES `pasajeros` WRITE;
+/*!40000 ALTER TABLE `pasajeros` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pasajeros` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reservaciones`
+--
+
+DROP TABLE IF EXISTS `reservaciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `reservaciones` (
+  `idReservacion` bigint NOT NULL AUTO_INCREMENT,
+  `idVuelo` bigint DEFAULT NULL,
+  `fechaReservacion` datetime DEFAULT NULL,
+  `numeroAsientos` int DEFAULT NULL,
+  `idPasajero` bigint DEFAULT NULL,
+  PRIMARY KEY (`idReservacion`),
+  KEY `idPasajero` (`idPasajero`),
+  KEY `idVuelo` (`idVuelo`),
+  CONSTRAINT `reservaciones_ibfk_1` FOREIGN KEY (`idPasajero`) REFERENCES `pasajeros` (`idPasajero`),
+  CONSTRAINT `reservaciones_ibfk_2` FOREIGN KEY (`idVuelo`) REFERENCES `vuelos` (`idVuelo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reservaciones`
+--
+
+LOCK TABLES `reservaciones` WRITE;
+/*!40000 ALTER TABLE `reservaciones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reservaciones` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tipo_vuelos`
+--
+
+DROP TABLE IF EXISTS `tipo_vuelos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tipo_vuelos` (
+  `idTipoVuelo` bigint NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`idTipoVuelo`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipo_vuelos`
+--
+
+LOCK TABLES `tipo_vuelos` WRITE;
+/*!40000 ALTER TABLE `tipo_vuelos` DISABLE KEYS */;
+INSERT INTO `tipo_vuelos` VALUES (1,'publico'),(2,'privado');
+/*!40000 ALTER TABLE `tipo_vuelos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vuelos`
+--
+
+DROP TABLE IF EXISTS `vuelos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vuelos` (
+  `idVuelo` bigint NOT NULL AUTO_INCREMENT,
+  `codigoVuelo` varchar(255) DEFAULT NULL,
+  `origen` varchar(255) DEFAULT NULL,
+  `destino` varchar(255) DEFAULT NULL,
+  `fechaPartida` datetime(6) NOT NULL,
+  `fechaLlegada` datetime(6) NOT NULL,
+  `precio` double NOT NULL,
+  `asientos` bigint NOT NULL,
+  `idTipoVuelo` bigint DEFAULT NULL,
+  `idAerolinea` bigint DEFAULT NULL,
+  PRIMARY KEY (`idVuelo`),
+  UNIQUE KEY `idVuelo` (`idVuelo`),
+  KEY `idTipoVuelo` (`idTipoVuelo`),
+  KEY `idAerolinea` (`idAerolinea`),
+  CONSTRAINT `vuelos_ibfk_1` FOREIGN KEY (`idTipoVuelo`) REFERENCES `tipo_vuelos` (`idTipoVuelo`),
+  CONSTRAINT `vuelos_ibfk_2` FOREIGN KEY (`idAerolinea`) REFERENCES `aerolineas` (`idAerolinea`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vuelos`
+--
+
+LOCK TABLES `vuelos` WRITE;
+/*!40000 ALTER TABLE `vuelos` DISABLE KEYS */;
+INSERT INTO `vuelos` VALUES (5,'EA0001','Bogota','Nueva York','2023-11-01 12:55:02.000000','2023-11-01 18:55:02.000000',21600,5,1,2),(6,'AV0001','Medellin','Nueva York','2023-11-01 12:55:02.000000','2023-11-01 17:55:02.000000',22600,5,1,1),(7,'SA0001','Cali','Nueva York','2023-11-01 12:55:02.000000','2023-11-01 19:55:02.000000',22800,5,1,3),(8,'SA0002','Cali','Medellin','2023-11-02 12:55:02.000000','2023-11-02 15:55:02.000000',2500,5,1,3),(9,'SA0003','Bogota','Medellin','2023-11-02 12:55:02.000000','2023-11-02 15:55:02.000000',2500,5,1,3),(10,'SA0004','Bogota','Medellin','2023-11-02 14:55:02.000000','2023-11-02 15:55:02.000000',2500,5,1,3),(11,'SA0005','Bogota','Medellin','2023-11-02 15:55:02.000000','2023-11-02 16:55:02.000000',2500,5,1,3);
+/*!40000 ALTER TABLE `vuelos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping routines for database 'reservas'
 --
 /*!50003 DROP FUNCTION IF EXISTS `generarCodigo` */;
@@ -113,4 +257,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-02 11:37:39
+-- Dump completed on 2023-11-02 11:46:34
