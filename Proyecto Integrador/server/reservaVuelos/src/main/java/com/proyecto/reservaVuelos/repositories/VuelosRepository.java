@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public interface VuelosRepository extends JpaRepository<VuelosModel, Long> {
 
@@ -33,4 +34,6 @@ public interface VuelosRepository extends JpaRepository<VuelosModel, Long> {
 
     @Query(value = "select * from vuelos as v where idVuelo = :idVuelo", nativeQuery = true)
     VuelosModel buscarVueloPorId(@Param("idVuelo") Long idVuelo);
+
+    Optional<VuelosModel> findByCodigoVuelo(String codigoVuelo);
 }

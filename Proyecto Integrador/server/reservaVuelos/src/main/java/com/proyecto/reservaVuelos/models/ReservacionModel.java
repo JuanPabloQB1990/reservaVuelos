@@ -1,0 +1,84 @@
+package com.proyecto.reservaVuelos.models;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+
+
+@Data
+@Entity
+@Table(name = "reservaciones")
+@AllArgsConstructor
+@NoArgsConstructor
+public class ReservacionModel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idReservacion;
+
+    private String codigoReservacion;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "idVuelo")
+    private VuelosModel vuelo;
+
+    private LocalDateTime fechaReservacion;
+
+    private String numeroReservacion;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "idPasajero")
+    private PasajerosModel pasajero;
+
+    public ReservacionModel(String codigoReservacion, VuelosModel vuelo, LocalDateTime fechaReservacion, String numeroReservacion, PasajerosModel pasajero) {
+        this.codigoReservacion = codigoReservacion;
+        this.vuelo = vuelo;
+        this.fechaReservacion = fechaReservacion;
+        this.numeroReservacion = numeroReservacion;
+        this.pasajero = pasajero;
+    }
+
+    public String getCodigoReservacion() {
+        return codigoReservacion;
+    }
+
+    public void setCodigoReservacion(String codigoReservacion) {
+        this.codigoReservacion = codigoReservacion;
+    }
+
+    public VuelosModel getVuelo() {
+        return vuelo;
+    }
+
+    public void setVuelo(VuelosModel vuelo) {
+        this.vuelo = vuelo;
+    }
+
+    public LocalDateTime getFechaReservacion() {
+        return fechaReservacion;
+    }
+
+    public void setFechaReservacion(LocalDateTime fechaReservacion) {
+        this.fechaReservacion = fechaReservacion;
+    }
+
+    public String getNumeroReservacion() {
+        return numeroReservacion;
+    }
+
+    public void setNumeroReservacion(String numeroReservacion) {
+        this.numeroReservacion = numeroReservacion;
+    }
+
+    public PasajerosModel getPasajero() {
+        return pasajero;
+    }
+
+    public void setPasajero(PasajerosModel pasajero) {
+        this.pasajero = pasajero;
+    }
+}

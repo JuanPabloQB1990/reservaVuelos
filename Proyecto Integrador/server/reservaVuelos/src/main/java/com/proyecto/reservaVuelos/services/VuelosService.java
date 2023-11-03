@@ -150,5 +150,14 @@ public class VuelosService {
         }
 
     }
+    public VuelosModel getFlightByCodigo(String codigoVuelo) throws EntityNotFoundException {
+        Optional<VuelosModel> vueloEncontrado = vuelosRepository.findByCodigoVuelo(codigoVuelo);
+
+        if (vueloEncontrado.isPresent()) {
+            return vueloEncontrado.get();
+        } else {
+            throw new EntityNotFoundException("Vuelo no encontrado");
+        }
+    }
 
 }
