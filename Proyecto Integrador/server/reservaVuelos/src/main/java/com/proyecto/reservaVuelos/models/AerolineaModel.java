@@ -1,7 +1,5 @@
 package com.proyecto.reservaVuelos.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +22,7 @@ public class AerolineaModel {
     private String nombre;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "aerolinea", cascade = CascadeType.ALL)
-    private List<VuelosModel> vuelos = new ArrayList<>();
+    private List<VueloModel> vuelos = new ArrayList<>();
 
 
 }

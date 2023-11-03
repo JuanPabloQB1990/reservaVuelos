@@ -12,14 +12,13 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
-public class PasajerosService {
+public class ClienteService {
 
     @Autowired
     ClienteRepository clienteRepository;
 
     public ArrayList<ClienteModel> getPasajeros(){
         return (ArrayList<ClienteModel>) clienteRepository.findAll();
-        //return List.of(new ModeloPasajeros(1,"Bendite", "Rutty", "1421833425", "bruttye@sitemeter.com", "Reino Unido", "Manchester", "44159 Rutledge Avenue"));
     }
 
     public ClienteModel getPasajeroByNombre(String primerNombre, String apellido) throws EntityNotFoundException {

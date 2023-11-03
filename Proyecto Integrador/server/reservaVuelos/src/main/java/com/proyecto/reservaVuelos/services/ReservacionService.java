@@ -2,7 +2,7 @@ package com.proyecto.reservaVuelos.services;
 
 import com.proyecto.reservaVuelos.excepcion.EntityNotFoundException;
 import com.proyecto.reservaVuelos.models.ClienteModel;
-import com.proyecto.reservaVuelos.models.VuelosModel;
+import com.proyecto.reservaVuelos.models.VueloModel;
 import com.proyecto.reservaVuelos.models.ReservacionModel;
 import com.proyecto.reservaVuelos.repositories.ReservacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +15,18 @@ import java.util.UUID;
 public class ReservacionService {
 
     private final ReservacionRepository reservacionRepository;
-    private final VuelosService vuelosService;
-    private final PasajerosService pasajerosService;
+    private final VueloService vueloService;
+    private final ClienteService clienteService;
 
     @Autowired
     public ReservacionService(
             ReservacionRepository reservacionRepository,
-            VuelosService vuelosService,
-            PasajerosService pasajerosService
+            VueloService vueloService,
+            ClienteService clienteService
     ) {
         this.reservacionRepository = reservacionRepository;
-        this.vuelosService = vuelosService;
-        this.pasajerosService = pasajerosService;
+        this.vueloService = vueloService;
+        this.clienteService = clienteService;
     }
 
     public ReservacionModel crearReservacion(
@@ -36,8 +36,8 @@ public class ReservacionService {
             String apellidoPasajero
     ) throws EntityNotFoundException {
         //Obtener el vuelo y pasajero correspondientes - Cree metodo en vuelo y pasajero
-        VuelosModel vuelo = vuelosService.getFlightByCodigo(codigoVuelo);
-        ClienteModel pasajero = pasajerosService.getPasajeroByNombre(primerNombrePasajero, apellidoPasajero);
+        VueloModel vuelo = vueloService.getFlightByCodigo(codigoVuelo);
+        ClienteModel pasajero = clienteService.getPasajeroByNombre(primerNombrePasajero, apellidoPasajero);
 
 
         String codigoReservacion = generarCodigoReservacion();

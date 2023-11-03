@@ -2,8 +2,8 @@ package com.proyecto.reservaVuelos.controllers;
 
 import com.proyecto.reservaVuelos.dto.VueloModelList;
 import com.proyecto.reservaVuelos.excepcion.EntityNotFoundException;
-import com.proyecto.reservaVuelos.models.VuelosModel;
-import com.proyecto.reservaVuelos.services.VuelosService;
+import com.proyecto.reservaVuelos.models.VueloModel;
+import com.proyecto.reservaVuelos.services.VueloService;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +18,22 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping(path = "v1/flights")
-public class VuelosController {
+public class VueloController {
 
-    private VuelosService vuelosService;
+    private VueloService vueloService;
 
     @Autowired
-    public VuelosController(VuelosService vuelosService) {
-        this.vuelosService = vuelosService;
+    public VueloController(VueloService vueloService) {
+        this.vueloService = vueloService;
     }
 
     @GetMapping(path="{idVuelo}")
     public VueloModelList getFlight(@PathVariable("idVuelo") Long idVuelo) throws EntityNotFoundException {
-        return this.vuelosService.getFlightById(idVuelo);
+        return this.vueloService.getFlightById(idVuelo);
     }
 
     @GetMapping
-    public Page<VuelosModel> getFlightsByCriterium(
+    public Page<VueloModel> getFlightsByCriterium(
             @RequestParam("origen") String origen,
             @RequestParam("destino") String destino,
             @RequestParam("fechaPartida") @Nullable LocalDate fechaPartida,
@@ -41,24 +41,24 @@ public class VuelosController {
             @RequestParam("size") int size) throws EntityNotFoundException {
         Pageable pageRequest = PageRequest.of(page, size);
         if (fechaPartida == null){
-            return this.vuelosService.getAllFlightsByWithOutDate(origen, destino, pageRequest);
+            return this.vueloService.getAllFlightsByWithOutDate(origen, destino, pageRequest);
         }
-        return this.vuelosService.getAllFlightsByWithDate(origen, destino, fechaPartida, pageRequest);
+        return this.vueloService.getAllFlightsByWithDate(origen, destino, fechaPartida, pageRequest);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> saveFlight(@RequestBody @Valid VuelosModel vuelo){
-        return this.vuelosService.saveFlight(vuelo);
+    public ResponseEntity<Object> saveFlight(@RequestBody @Valid VueloModel vuelo){
+        return this.vueloService.saveFlight(vuelo);
     }
 
     @PutMapping(path="{idFlight}")
-    public ResponseEntity<Object> updateFlight(@PathVariable("idFlight") Long idVuelo, @RequestBody VuelosModel editVuelo) throws EntityNotFoundException {
-        return this.vuelosService.updateFlight(idVuelo, editVuelo);
+    public ResponseEntity<Object> updateFlight(@PathVariable("idFlight") Long idVuelo, @RequestBody VueloModel editVuelo) throws EntityNotFoundException {
+        return this.vueloService.updateFlight(idVuelo, editVuelo);
     }
 
     @DeleteMapping(path = "{idFlight}")
     public ResponseEntity<Object> deleteFlightById(@PathVariable("idFlight") Long idVuelo) throws EntityNotFoundException {
-        return this.vuelosService.deleteFlightById(idVuelo);
+        return this.vueloService.deleteFlightById(idVuelo);
 
     }
 }

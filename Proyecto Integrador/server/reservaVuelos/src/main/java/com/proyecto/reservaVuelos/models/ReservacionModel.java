@@ -24,7 +24,7 @@ public class ReservacionModel {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "idVuelo")
-    private VuelosModel vuelo;
+    private VueloModel vuelo;
 
     private LocalDateTime fechaReservacion;
 
@@ -34,7 +34,7 @@ public class ReservacionModel {
     @JoinColumn(name = "idPasajero")
     private ClienteModel pasajero;
 
-    public ReservacionModel(String codigoReservacion, VuelosModel vuelo, LocalDateTime fechaReservacion, String numeroReservacion, ClienteModel pasajero) {
+    public ReservacionModel(String codigoReservacion, VueloModel vuelo, LocalDateTime fechaReservacion, String numeroReservacion, ClienteModel pasajero) {
         this.codigoReservacion = codigoReservacion;
         this.vuelo = vuelo;
         this.fechaReservacion = fechaReservacion;
@@ -50,11 +50,11 @@ public class ReservacionModel {
         this.codigoReservacion = codigoReservacion;
     }
 
-    public VuelosModel getVuelo() {
+    public VueloModel getVuelo() {
         return vuelo;
     }
 
-    public void setVuelo(VuelosModel vuelo) {
+    public void setVuelo(VueloModel vuelo) {
         this.vuelo = vuelo;
     }
 
