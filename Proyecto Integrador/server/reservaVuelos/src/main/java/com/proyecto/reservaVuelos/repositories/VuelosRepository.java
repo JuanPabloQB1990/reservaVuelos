@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public interface VuelosRepository extends JpaRepository<VuelosModel, Long> {
 
@@ -51,5 +52,5 @@ public interface VuelosRepository extends JpaRepository<VuelosModel, Long> {
             nativeQuery = true)
     Page<VuelosModel> mostrarVuelosPorCriterioSinFecha(@Param("origen")String origen,
                                                        @Param("destino")String destino, Pageable pageable);
-
+    Optional<VuelosModel> findByCodigoVuelo(String codigoVuelo);
 }
