@@ -7,12 +7,14 @@ import com.proyecto.reservaVuelos.services.VuelosService;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping(path = "v1/flights")
@@ -31,11 +33,17 @@ public class VuelosController {
     }
 
     @GetMapping
-    public ArrayList<VueloModelList> getFlightsByCriterium(@RequestParam("origen") String origen, @RequestParam("destino") String destino, @RequestParam("fechaPartida") @Nullable LocalDate fechaPartida) throws EntityNotFoundException {
+    public Page<VuelosModel> getFlightsByCriterium(
+            @RequestParam("origen") String origen,
+            @RequestParam("destino") String destino,
+            @RequestParam("fechaPartida") @Nullable LocalDate fechaPartida,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) throws EntityNotFoundException {
+        Pageable pageRequest = PageRequest.of(page, size);
         if (fechaPartida == null){
-            return this.vuelosService.getAllFlightsByWithOutDate(origen, destino);
+            return this.vuelosService.getAllFlightsByWithOutDate(origen, destino, pageRequest);
         }
-        return this.vuelosService.getAllFlightsByWithDate(origen, destino, fechaPartida);
+        return this.vuelosService.getAllFlightsByWithDate(origen, destino, fechaPartida, pageRequest);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -44,8 +52,8 @@ public class VuelosController {
     }
 
     @PutMapping(path="{idFlight}")
-    public ResponseEntity<Object> updateFlight(@PathVariable("idFlight") Long idFlight, @RequestBody VuelosModel editFlight){
-        return this.vuelosService.updateFlight(idFlight, editFlight);
+    public ResponseEntity<Object> updateFlight(@PathVariable("idFlight") Long idVuelo, @RequestBody VuelosModel editVuelo) throws EntityNotFoundException {
+        return this.vuelosService.updateFlight(idVuelo, editVuelo);
     }
 
     @DeleteMapping(path = "{idFlight}")

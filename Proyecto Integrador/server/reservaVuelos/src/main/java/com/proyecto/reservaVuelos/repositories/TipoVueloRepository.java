@@ -1,6 +1,5 @@
 package com.proyecto.reservaVuelos.repositories;
 
-import com.proyecto.reservaVuelos.models.PasajerosModel;
 import com.proyecto.reservaVuelos.models.TipoVueloModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 

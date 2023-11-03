@@ -23,7 +23,7 @@ public class AerolineaModel {
 
     private String nombre;
 
-    @OneToMany(mappedBy = "aerolinea", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "aerolinea", cascade = CascadeType.ALL)
     private List<VuelosModel> vuelos = new ArrayList<>();
 
 

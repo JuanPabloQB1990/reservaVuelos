@@ -41,12 +41,12 @@ public class VuelosModel {
     @Min(1)
     private long asientos;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idTipoVuelo")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private TipoVueloModel tipoVuelo;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idAerolinea")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private AerolineaModel aerolinea;

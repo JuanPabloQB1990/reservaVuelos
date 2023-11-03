@@ -1,6 +1,6 @@
 package com.proyecto.reservaVuelos.controllers;
 
-import com.proyecto.reservaVuelos.models.PasajerosModel;
+import com.proyecto.reservaVuelos.models.ClienteModel;
 import com.proyecto.reservaVuelos.services.PasajerosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +11,17 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/pasajeros")
-public class PasajerosController {
+public class ClienteController {
 
     private PasajerosService pasajerosService;
 
     @Autowired
-    public PasajerosController(PasajerosService pasajerosService) {
+    public ClienteController(PasajerosService pasajerosService) {
         this.pasajerosService = pasajerosService;
     }
 
     @GetMapping
-    public ArrayList<PasajerosModel> obtenerPasajeros(){
+    public ArrayList<ClienteModel> obtenerPasajeros(){
         return pasajerosService.getPasajeros();
     }
 }
