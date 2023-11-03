@@ -1,5 +1,5 @@
 # reservaVuelos
-proyecto integrador bootcamp Makaia, reserva vuelos: aca puedes reservar un vuelo y buscar vuelos por origen - destino y fecha de partida 
+El proyecto integrador del Bootcamp Makaia dedicado a la reserva de vuelos es una solución tecnológica que optimizaa el proceso de búsqueda y reserva de vuelos aéreos.
 
 # Diagrama UML
 
