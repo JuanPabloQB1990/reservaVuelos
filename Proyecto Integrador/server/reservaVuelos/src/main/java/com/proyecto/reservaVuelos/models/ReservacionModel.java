@@ -74,9 +74,7 @@ public class ReservacionModel {
         this.numeroReservacion = numeroReservacion;
     }
 
-    public ClienteModel getPasajero() {
-        return pasajero;
-    }
+    public ClienteModel getPasajero() {return pasajero;}
 
     public void setPasajero(ClienteModel pasajero) {
         this.pasajero = pasajero;

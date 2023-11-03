@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "pasajeros")
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class ClienteModel {
 
     @Id
@@ -30,6 +31,5 @@ public class ClienteModel {
     private String ciudad;
     @Column
     private String direccion;
-
 
 }

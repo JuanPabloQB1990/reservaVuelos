@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,7 +36,7 @@ public class ReservacionService {
             String primerNombrePasajero,
             String apellidoPasajero
     ) throws EntityNotFoundException {
-        //Obtener el vuelo y pasajero correspondientes - Cree metodo en vuelo y pasajero
+        //Obtener el vuelo y pasajero correspondientes - Creo metodo en vuelo y pasajero
         VueloModel vuelo = vueloService.getFlightByCodigo(codigoVuelo);
         ClienteModel pasajero = clienteService.getPasajeroByNombre(primerNombrePasajero, apellidoPasajero);
 
@@ -57,6 +58,21 @@ public class ReservacionService {
         return reservacionRepository.save(reservacion);
     }
 
+    public void eliminarReservacionPorCliente(String primerNombrePasajero, String apellidoPasajero) throws EntityNotFoundException {
+        // Obtener la lista de reservaciones del cliente con el nombre y apellido proporcionados
+        List<ReservacionModel> reservaciones = reservacionRepository.findByCliente_PrimerNombreAndPasajero_Apellido(primerNombrePasajero, apellidoPasajero);
+
+        if (!reservaciones.isEmpty()) {
+            // Eliminar cada reserva encontrada
+            for (ReservacionModel reservacion : reservaciones) {
+                reservacionRepository.delete(reservacion);
+            }
+        } else {
+            throw new EntityNotFoundException("No se encontraron reservaciones para el cliente especificado");
+        }
+    }
+
+
     private String generarCodigoReservacion() {
         return UUID.randomUUID().toString();
     }
@@ -64,4 +80,7 @@ public class ReservacionService {
     private String generarNumeroReservacion() {
         return "12345"; //Ejemplo
     }
+
+
+
 }
