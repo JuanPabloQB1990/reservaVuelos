@@ -14,8 +14,12 @@ import java.util.Optional;
 @Service
 public class ClienteService {
 
-    @Autowired
     ClienteRepository clienteRepository;
+
+    @Autowired
+    public ClienteService(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
+    }
 
     public ArrayList<ClienteModel> getPasajeros(){
         return (ArrayList<ClienteModel>) clienteRepository.findAll();

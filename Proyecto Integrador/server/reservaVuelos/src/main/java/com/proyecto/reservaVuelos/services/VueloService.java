@@ -112,7 +112,7 @@ public class VueloService {
         if (vueloEncontrado.isPresent()){
 
             vueloRepository.actualizarVuelo(
-                    editVuelo.getIdVuelo(),
+                    idVuelo,
                     editVuelo.getOrigen(),
                     editVuelo.getDestino(),
                     editVuelo.getFechaPartida(),

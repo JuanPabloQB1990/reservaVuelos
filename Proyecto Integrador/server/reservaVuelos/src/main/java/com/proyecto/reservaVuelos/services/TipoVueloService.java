@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class TipoVueloService {
 
-    TipoVueloRepository tipoVueloRepository;
+    private TipoVueloRepository tipoVueloRepository;
 
     @Autowired
     public TipoVueloService(TipoVueloRepository tipoVueloRepository) {

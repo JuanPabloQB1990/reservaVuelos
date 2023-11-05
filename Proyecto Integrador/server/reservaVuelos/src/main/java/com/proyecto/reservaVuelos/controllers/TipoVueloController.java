@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping(path = "v1/typeFlights")
 public class TipoVueloController {
 
-    TipoVueloService tipoVueloService;
+    private TipoVueloService tipoVueloService;
 
     @Autowired
     public TipoVueloController(TipoVueloService tipoVueloService) {

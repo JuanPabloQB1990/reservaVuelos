@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class AerolineaService {
 
-    AerolineaRepository aerolineaRepository;
+    private AerolineaRepository aerolineaRepository;
 
     @Autowired
     public AerolineaService(AerolineaRepository aerolineaRepository) {
@@ -23,7 +23,6 @@ public class AerolineaService {
     }
 
     private HashMap<String, Object> datos;
-
 
     public List<AerolineaModel> getAerolineas(){
         return this.aerolineaRepository.findAll();

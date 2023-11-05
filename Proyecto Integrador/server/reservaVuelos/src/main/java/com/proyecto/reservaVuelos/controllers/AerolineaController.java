@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "v1/aerolineas")
 public class AerolineaController {
-    AerolineaService aerolineaService;
+    private AerolineaService aerolineaService;
 
     @Autowired
     public AerolineaController(AerolineaService aerolineaService) {
