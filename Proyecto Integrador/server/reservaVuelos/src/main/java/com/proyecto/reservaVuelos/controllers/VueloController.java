@@ -1,5 +1,6 @@
 package com.proyecto.reservaVuelos.controllers;
 
+import com.proyecto.reservaVuelos.dto.EscalaModelList;
 import com.proyecto.reservaVuelos.dto.VueloModelList;
 import com.proyecto.reservaVuelos.excepcion.EntityNotFoundException;
 import com.proyecto.reservaVuelos.models.VueloModel;
@@ -15,6 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Stack;
 
 @RestController
 @RequestMapping(path = "v1/flights")
@@ -33,17 +38,15 @@ public class VueloController {
     }
 
     @GetMapping
-    public Page<VueloModel> getFlightsByCriterium(
+    public Stack<ArrayList<VueloModel>> getFlightsByCriterium(
             @RequestParam("origen") String origen,
             @RequestParam("destino") String destino,
-            @RequestParam("fechaPartida") @Nullable LocalDate fechaPartida,
-            @RequestParam("page") int page,
-            @RequestParam("size") int size) throws EntityNotFoundException {
-        Pageable pageRequest = PageRequest.of(page, size);
+            @RequestParam("fechaPartida") @Nullable LocalDate fechaPartida) throws EntityNotFoundException {
+        //Pageable pageRequest = PageRequest.of(page, size);
         if (fechaPartida == null){
-            return this.vueloService.getAllFlightsByWithOutDate(origen, destino, pageRequest);
+            return this.vueloService.getAllFlightsByWithOutDate(origen, destino);
         }
-        return this.vueloService.getAllFlightsByWithDate(origen, destino, fechaPartida, pageRequest);
+        return this.vueloService.getAllFlightsByWithDate(origen, destino, fechaPartida);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

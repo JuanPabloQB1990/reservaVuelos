@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface VueloRepository extends JpaRepository<VueloModel, Long> {
@@ -42,14 +43,40 @@ public interface VueloRepository extends JpaRepository<VueloModel, Long> {
 
     @Query(value = "select * from vuelos where origen = :origen and destino = :destino and date(fechaPartida) = :fechaPartida",
             nativeQuery = true)
-    Page<VueloModel> mostrarVuelosPorCriterioConFecha(@Param("origen")String origen,
+    List<VueloModel> mostrarVuelosPorCriterioConFecha(@Param("origen")String origen,
                                                       @Param("destino")String destino,
-                                                      @Param("fechaPartida") LocalDate fechaPartida,
-                                                      Pageable pageable);
+                                                      @Param("fechaPartida") LocalDate fechaPartida);
 
+
+
+
+
+
+
+
+// ********** vuelos sin fecha
     @Query(value = "select * from vuelos where origen = :origen and destino = :destino",
             nativeQuery = true)
-    Page<VueloModel> mostrarVuelosPorCriterioSinFecha(@Param("origen")String origen,
-                                                      @Param("destino")String destino, Pageable pageable);
+    List<VueloModel> buscarVuelosDirectosSinFecha(@Param("origen")String origen, @Param("destino")String destino);
+
+    @Query(value = "select * from vuelos where origen = :origen", nativeQuery = true)
+    List<VueloModel> buscarVuelosConSoloOrigen(@Param("origen")String origen);
+
+    @Query(value = "select * from vuelos where origen = :destinoRes and destino = :destino and fechaPartida > :fechaLlegada and date(fechaLlegada) = date(:fechaLlegada)", nativeQuery = true)
+    List<VueloModel> buscarSegundoVueloUnaEscala(@Param("destinoRes")String destinoRes,
+                                                 @Param("destino")String destino,
+                                                 @Param("fechaLlegada") LocalDateTime fechaLlegada);
+
+    @Query(value = "select * from vuelos where  destino = :destino and fechaPartida > :fechaPartida and date(fechaPartida) = date(:fechaPartida)", nativeQuery = true)
+    List<VueloModel> buscarTercerVueloDosEscalas(@Param("destino")String destino, @Param("fechaPartida") LocalDateTime fechaPartida);
+
+    @Query(value = "select * from vuelos where origen = :destinoRes and destino = :origenRes and fechaPartida > :fechaLlegadaRes1 and fechaLlegada < :fechaPartidaRes2", nativeQuery = true)
+    List<VueloModel> buscarVuelosIntermidiosDosEscalas(@Param("destinoRes")String destinoRes,
+                                                       @Param("origenRes")String origenRes,
+                                                       @Param("fechaLlegadaRes1") LocalDateTime fechaLlegadaRes1,
+                                                       @Param("fechaPartidaRes2") LocalDateTime fechaPartidaRes2);
+
+
+
     Optional<VueloModel> findByCodigoVuelo(String codigoVuelo);
 }
