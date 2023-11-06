@@ -48,64 +48,66 @@ public class VueloService {
         }
     }
 
-    public Stack<ArrayList<VueloModel>> getAllFlightsByWithDate(String origen, String destino, LocalDate fechaPartida) throws EntityNotFoundException {
+    public Stack<List<VueloModelList>> obtenerTodosLosVuelosConFecha(String origen, String destino, LocalDate fechaPartida) throws EntityNotFoundException {
 
-        List<VueloModel> vuelosEncontrados =  vueloRepository.mostrarVuelosPorCriterioConFecha(origen, destino, fechaPartida);
-        Stack<ArrayList<VueloModel>> escalas = new Stack<>();
+        Stack<List<VueloModelList>> escalas = new Stack<>();
+        List<VueloModelList> listaVuelos = new ArrayList<>();
 
-        if (!vuelosEncontrados.isEmpty()){
-            /*
-            ArrayList<VueloModelList> listaVuelos = new ArrayList<>();
+        List<VueloModel> vuelosDirectosConFecha =  vueloRepository.buscarVuelosDirectosConFecha(origen, destino, fechaPartida);
 
-            for (VuelosModel vuelo: vuelosEncontrados.getContent()) {
-             listaVuelos.add(VueloModelList.build(
-                     vuelo.getCodigoVuelo(),
-                     vuelo.getOrigen(),
-                     vuelo.getDestino(),
-                     vuelo.getFechaPartida(),
-                     vuelo.getFechaLlegada(),
-                     vuelo.getPrecio(),
-                     vuelo.getAsientos(),
-                     vuelo.getTipoVuelo().getNombre(),
-                     vuelo.getAerolinea().getNombre()));
+        if (!vuelosDirectosConFecha.isEmpty()){
+            for (VueloModel vueloDirecto: vuelosDirectosConFecha) {
+                listaVuelos.add(VueloModelList.build(
+                        vueloDirecto.getCodigoVuelo(),
+                        vueloDirecto.getOrigen(),
+                        vueloDirecto.getDestino(),
+                        vueloDirecto.getFechaPartida(),
+                        vueloDirecto.getFechaLlegada(),
+                        vueloDirecto.getPrecio(),
+                        vueloDirecto.getAsientos(),
+                        vueloDirecto.getTipoVuelo().getNombre(),
+                        vueloDirecto.getAerolinea().getNombre()));
             }
-            */
-            ;
-            escalas.add(new EscalaModelList((ArrayList<VueloModel>) vuelosEncontrados).getVuelos());
-            return escalas;
-        }else{
-            throw new EntityNotFoundException("no hay vuelos para este origen, destino y esta fecha");
-        }
-    }
 
-    public Stack<ArrayList<VueloModel>> getAllFlightsByWithOutDate(String origen, String destino) throws EntityNotFoundException {
-
-        Stack<ArrayList<VueloModel>> escalas = new Stack<>();
-        ArrayList<VueloModel> listaVuelos = new ArrayList<>();
-        //buscar vuelos directos
-        List<VueloModel> vuelosDirectos = vueloRepository.buscarVuelosDirectosSinFecha(origen, destino);
-
-        if (!vuelosDirectos.isEmpty()){
             escalas.add(new EscalaModelList(listaVuelos).getVuelos());
         }
 
-            // buscar vuelos con solo origen -> primeros vuelos
-        List<VueloModel> vuelosSinDestino = vueloRepository.buscarVuelosConSoloOrigen(origen);
+        // buscar vuelos con solo origen -> primeros vuelos
+        List<VueloModel> primerosVuelos = vueloRepository.buscarVuelosConSoloOrigenConFecha(origen, fechaPartida);
         // 1. bogota - medellin 2023-11-06 12:00:02 -- 2023-11-06 13:00:02
         // 2. bogota - medellin 2023-11-06 10:30:02 -- 2023-11-06 11:20:02
         // guardar vuelos con una escala
-        for (VueloModel vueloSinDestino: vuelosSinDestino) {
+        for (VueloModel primerVuelo: primerosVuelos) {
 
-                // buscar vuelos segundo con destino
-            List<VueloModel> segundoVueloUnaEscala = vueloRepository.buscarSegundoVueloUnaEscala(vueloSinDestino.getDestino(), destino, vueloSinDestino.getFechaLlegada());
+            // buscar vuelos segundo con destino
+            List<VueloModel> segundoVueloUnaEscala = vueloRepository.buscarSegundoVueloUnaEscala(primerVuelo.getDestino(), destino, primerVuelo.getFechaLlegada());
             // 1. medellin - cali - 2023-11-06 15:30:02 -- 2023-11-06 15:30:02
             // 2. medellin - cali - 2023-11-06 14:30:02 -- 2023-11-06 15:20:02
             if (!segundoVueloUnaEscala.isEmpty()){
 
                 for (VueloModel segundoVuelo: segundoVueloUnaEscala) {
-                    if (segundoVuelo.getFechaPartida().minusHours(1).isAfter(vueloSinDestino.getFechaLlegada())){
-                        listaVuelos.add(vueloSinDestino);
-                        listaVuelos.add(segundoVuelo);
+                    if (segundoVuelo.getFechaPartida().minusHours(1).isAfter(primerVuelo.getFechaLlegada())){
+
+                        listaVuelos.add(VueloModelList.build(
+                                primerVuelo.getCodigoVuelo(),
+                                primerVuelo.getOrigen(),
+                                primerVuelo.getDestino(),
+                                primerVuelo.getFechaPartida(),
+                                primerVuelo.getFechaLlegada(),
+                                primerVuelo.getPrecio(),
+                                primerVuelo.getAsientos(),
+                                primerVuelo.getTipoVuelo().getNombre(),
+                                primerVuelo.getAerolinea().getNombre()));
+                        listaVuelos.add(VueloModelList.build(
+                                segundoVuelo.getCodigoVuelo(),
+                                segundoVuelo.getOrigen(),
+                                segundoVuelo.getDestino(),
+                                segundoVuelo.getFechaPartida(),
+                                segundoVuelo.getFechaLlegada(),
+                                segundoVuelo.getPrecio(),
+                                segundoVuelo.getAsientos(),
+                                segundoVuelo.getTipoVuelo().getNombre(),
+                                segundoVuelo.getAerolinea().getNombre()));
 
                         EscalaModelList escala = new EscalaModelList(listaVuelos);
                         escalas.push(escala.getVuelos());
@@ -115,16 +117,16 @@ public class VueloService {
                 }
             }
 
-            List<VueloModel> vuelosTerceros = vueloRepository.buscarTercerVueloDosEscalas(destino, vueloSinDestino.getFechaLlegada());
+            List<VueloModel> vuelosTerceros = vueloRepository.buscarTercerVueloDosEscalas(destino, primerVuelo.getFechaLlegada());
 
-            if (!vuelosTerceros.isEmpty()){
+            if (!vuelosTerceros.isEmpty()) {
 
-                for (VueloModel vueloTercero: vuelosTerceros) {
-                // cucuta - cali - 2023-11-06 19:30:02 -- 2023-11-06 20:20:02
-                // pereira - cali - 2023-11-06 19:20:02 -- 2023-11-06 20:20:02
+                for (VueloModel vueloTercero : vuelosTerceros) {
+                    // cucuta - cali - 2023-11-06 19:30:02 -- 2023-11-06 20:20:02
+                    // pereira - cali - 2023-11-06 19:20:02 -- 2023-11-06 20:20:02
 
-                // buscar vuelos intermedios
-                    List<VueloModel> vuelosIntermedios = vueloRepository.buscarVuelosIntermidiosDosEscalas(vueloSinDestino.getDestino(),vueloTercero.getOrigen(), vueloSinDestino.getFechaLlegada(), vueloTercero.getFechaPartida());
+                    // buscar vuelos intermedios
+                    List<VueloModel> vuelosIntermedios = vueloRepository.buscarVuelosIntermidiosDosEscalas(primerVuelo.getDestino(),vueloTercero.getOrigen(), primerVuelo.getFechaLlegada(), vueloTercero.getFechaPartida());
                     //medellin - pereira -- 2023-11-06 15:20:02 -- 2023-11-06 16:20:02
                     //medellin - pereira -- 2023-11-06 16:00:02 -- 2023-11-06 17:00:02
                     if (!vuelosIntermedios.isEmpty()) {
@@ -132,9 +134,36 @@ public class VueloService {
                         for (VueloModel vueloIntermedio :vuelosIntermedios) {
 
                             if (vueloTercero.getFechaPartida().minusHours(1).isAfter(vueloIntermedio.getFechaLlegada())){
-                                listaVuelos.add(vueloSinDestino);
-                                listaVuelos.add(vueloIntermedio);
-                                listaVuelos.add(vueloTercero);
+                                listaVuelos.add(VueloModelList.build(
+                                        primerVuelo.getCodigoVuelo(),
+                                        primerVuelo.getOrigen(),
+                                        primerVuelo.getDestino(),
+                                        primerVuelo.getFechaPartida(),
+                                        primerVuelo.getFechaLlegada(),
+                                        primerVuelo.getPrecio(),
+                                        primerVuelo.getAsientos(),
+                                        primerVuelo.getTipoVuelo().getNombre(),
+                                        primerVuelo.getAerolinea().getNombre()));
+                                listaVuelos.add(VueloModelList.build(
+                                        vueloIntermedio.getCodigoVuelo(),
+                                        vueloIntermedio.getOrigen(),
+                                        vueloIntermedio.getDestino(),
+                                        vueloIntermedio.getFechaPartida(),
+                                        vueloIntermedio.getFechaLlegada(),
+                                        vueloIntermedio.getPrecio(),
+                                        vueloIntermedio.getAsientos(),
+                                        vueloIntermedio.getTipoVuelo().getNombre(),
+                                        vueloIntermedio.getAerolinea().getNombre()));
+                                listaVuelos.add(VueloModelList.build(
+                                        vueloTercero.getCodigoVuelo(),
+                                        vueloTercero.getOrigen(),
+                                        vueloTercero.getDestino(),
+                                        vueloTercero.getFechaPartida(),
+                                        vueloTercero.getFechaLlegada(),
+                                        vueloTercero.getPrecio(),
+                                        vueloTercero.getAsientos(),
+                                        vueloTercero.getTipoVuelo().getNombre(),
+                                        vueloTercero.getAerolinea().getNombre()));
 
                                 EscalaModelList escala = new EscalaModelList(listaVuelos);
                                 escalas.push(escala.getVuelos());
@@ -148,7 +177,148 @@ public class VueloService {
             }
         }
 
-        return escalas;
+        if (!escalas.isEmpty()){
+            return escalas;
+        }else {
+            throw new EntityNotFoundException("no hay vuelos programados");
+        }
+    }
+
+    public Stack<List<VueloModelList>> obtenerTodosLosVuelosSinFecha(String origen, String destino) throws EntityNotFoundException {
+
+        Stack<List<VueloModelList>> escalas = new Stack<>();
+        ArrayList<VueloModelList> listaVuelos = new ArrayList<>();
+
+        //buscar vuelos directos
+        List<VueloModel> vuelosDirectosSinFecha = vueloRepository.buscarVuelosDirectosSinFecha(origen, destino);
+
+        if (!vuelosDirectosSinFecha.isEmpty()){
+            for (VueloModel vueloDirecto: vuelosDirectosSinFecha) {
+                listaVuelos.add(VueloModelList.build(
+                        vueloDirecto.getCodigoVuelo(),
+                        vueloDirecto.getOrigen(),
+                        vueloDirecto.getDestino(),
+                        vueloDirecto.getFechaPartida(),
+                        vueloDirecto.getFechaLlegada(),
+                        vueloDirecto.getPrecio(),
+                        vueloDirecto.getAsientos(),
+                        vueloDirecto.getTipoVuelo().getNombre(),
+                        vueloDirecto.getAerolinea().getNombre()));
+            }
+
+            escalas.add(new EscalaModelList(listaVuelos).getVuelos());
+        }
+
+        // buscar vuelos con solo origen -> primeros vuelos
+        List<VueloModel> primerosVuelos = vueloRepository.buscarVuelosConSoloOrigenSinFecha(origen);
+        // 1. bogota - medellin 2023-11-06 12:00:02 -- 2023-11-06 13:00:02
+        // 2. bogota - medellin 2023-11-06 10:30:02 -- 2023-11-06 11:20:02
+        // guardar vuelos con una escala
+        for (VueloModel primerVuelo: primerosVuelos) {
+
+            // buscar vuelos segundo con destino
+            List<VueloModel> segundoVueloUnaEscala = vueloRepository.buscarSegundoVueloUnaEscala(primerVuelo.getDestino(), destino, primerVuelo.getFechaLlegada());
+            // 1. medellin - cali - 2023-11-06 15:30:02 -- 2023-11-06 15:30:02
+            // 2. medellin - cali - 2023-11-06 14:30:02 -- 2023-11-06 15:20:02
+            if (!segundoVueloUnaEscala.isEmpty()){
+
+                for (VueloModel segundoVuelo: segundoVueloUnaEscala) {
+                    if (segundoVuelo.getFechaPartida().minusHours(1).isAfter(primerVuelo.getFechaLlegada())){
+
+                        listaVuelos.add(VueloModelList.build(
+                                primerVuelo.getCodigoVuelo(),
+                                primerVuelo.getOrigen(),
+                                primerVuelo.getDestino(),
+                                primerVuelo.getFechaPartida(),
+                                primerVuelo.getFechaLlegada(),
+                                primerVuelo.getPrecio(),
+                                primerVuelo.getAsientos(),
+                                primerVuelo.getTipoVuelo().getNombre(),
+                                primerVuelo.getAerolinea().getNombre()));
+                        listaVuelos.add(VueloModelList.build(
+                                segundoVuelo.getCodigoVuelo(),
+                                segundoVuelo.getOrigen(),
+                                segundoVuelo.getDestino(),
+                                segundoVuelo.getFechaPartida(),
+                                segundoVuelo.getFechaLlegada(),
+                                segundoVuelo.getPrecio(),
+                                segundoVuelo.getAsientos(),
+                                segundoVuelo.getTipoVuelo().getNombre(),
+                                segundoVuelo.getAerolinea().getNombre()));
+
+                        EscalaModelList escala = new EscalaModelList(listaVuelos);
+                        escalas.push(escala.getVuelos());
+                        escala.setVuelos(listaVuelos = new ArrayList<>());
+                    }
+
+                }
+            }
+
+            List<VueloModel> vuelosTerceros = vueloRepository.buscarTercerVueloDosEscalas(destino, primerVuelo.getFechaLlegada());
+
+            if (!vuelosTerceros.isEmpty()) {
+
+                for (VueloModel vueloTercero : vuelosTerceros) {
+                // cucuta - cali - 2023-11-06 19:30:02 -- 2023-11-06 20:20:02
+                // pereira - cali - 2023-11-06 19:20:02 -- 2023-11-06 20:20:02
+
+                // buscar vuelos intermedios
+                    List<VueloModel> vuelosIntermedios = vueloRepository.buscarVuelosIntermidiosDosEscalas(primerVuelo.getDestino(),vueloTercero.getOrigen(), primerVuelo.getFechaLlegada(), vueloTercero.getFechaPartida());
+                    //medellin - pereira -- 2023-11-06 15:20:02 -- 2023-11-06 16:20:02
+                    //medellin - pereira -- 2023-11-06 16:00:02 -- 2023-11-06 17:00:02
+                    if (!vuelosIntermedios.isEmpty()) {
+
+                        for (VueloModel vueloIntermedio :vuelosIntermedios) {
+
+                            if (vueloTercero.getFechaPartida().minusHours(1).isAfter(vueloIntermedio.getFechaLlegada())){
+                                listaVuelos.add(VueloModelList.build(
+                                        primerVuelo.getCodigoVuelo(),
+                                        primerVuelo.getOrigen(),
+                                        primerVuelo.getDestino(),
+                                        primerVuelo.getFechaPartida(),
+                                        primerVuelo.getFechaLlegada(),
+                                        primerVuelo.getPrecio(),
+                                        primerVuelo.getAsientos(),
+                                        primerVuelo.getTipoVuelo().getNombre(),
+                                        primerVuelo.getAerolinea().getNombre()));
+                                listaVuelos.add(VueloModelList.build(
+                                        vueloIntermedio.getCodigoVuelo(),
+                                        vueloIntermedio.getOrigen(),
+                                        vueloIntermedio.getDestino(),
+                                        vueloIntermedio.getFechaPartida(),
+                                        vueloIntermedio.getFechaLlegada(),
+                                        vueloIntermedio.getPrecio(),
+                                        vueloIntermedio.getAsientos(),
+                                        vueloIntermedio.getTipoVuelo().getNombre(),
+                                        vueloIntermedio.getAerolinea().getNombre()));
+                                listaVuelos.add(VueloModelList.build(
+                                        vueloTercero.getCodigoVuelo(),
+                                        vueloTercero.getOrigen(),
+                                        vueloTercero.getDestino(),
+                                        vueloTercero.getFechaPartida(),
+                                        vueloTercero.getFechaLlegada(),
+                                        vueloTercero.getPrecio(),
+                                        vueloTercero.getAsientos(),
+                                        vueloTercero.getTipoVuelo().getNombre(),
+                                        vueloTercero.getAerolinea().getNombre()));
+
+                                EscalaModelList escala = new EscalaModelList(listaVuelos);
+                                escalas.push(escala.getVuelos());
+                                escala.setVuelos(listaVuelos = new ArrayList<>());
+                            }
+
+                        }
+                    }
+
+                }
+            }
+        }
+
+        if (!escalas.isEmpty()){
+            return escalas;
+        }else {
+            throw new EntityNotFoundException("no hay vuelos programados");
+        }
 
     }
 

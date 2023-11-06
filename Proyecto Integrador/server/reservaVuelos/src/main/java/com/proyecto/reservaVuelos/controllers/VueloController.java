@@ -38,15 +38,15 @@ public class VueloController {
     }
 
     @GetMapping
-    public Stack<ArrayList<VueloModel>> getFlightsByCriterium(
+    public Stack<List<VueloModelList>> getFlightsByCriterium(
             @RequestParam("origen") String origen,
             @RequestParam("destino") String destino,
             @RequestParam("fechaPartida") @Nullable LocalDate fechaPartida) throws EntityNotFoundException {
         //Pageable pageRequest = PageRequest.of(page, size);
         if (fechaPartida == null){
-            return this.vueloService.getAllFlightsByWithOutDate(origen, destino);
+            return this.vueloService.obtenerTodosLosVuelosSinFecha(origen, destino);
         }
-        return this.vueloService.getAllFlightsByWithDate(origen, destino, fechaPartida);
+        return this.vueloService.obtenerTodosLosVuelosConFecha(origen, destino, fechaPartida);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

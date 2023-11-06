@@ -10,17 +10,17 @@ import java.util.List;
 
 @Component
 public class EscalaModelList {
-    private ArrayList<VueloModel> vuelos;
+    private List<VueloModelList> vuelos;
 
-    public EscalaModelList(ArrayList<VueloModel> vuelos) {
+    public EscalaModelList(List<VueloModelList> vuelos) {
         this.vuelos = vuelos;
     }
 
-    public ArrayList<VueloModel> getVuelos() {
+    public List<VueloModelList> getVuelos() {
         return vuelos;
     }
 
-    public void setVuelos(ArrayList<VueloModel> vuelos) {
+    public void setVuelos(List<VueloModelList> vuelos) {
         this.vuelos = vuelos;
     }
 }

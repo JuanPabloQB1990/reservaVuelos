@@ -41,28 +41,30 @@ public interface VueloRepository extends JpaRepository<VueloModel, Long> {
                     @Param("idTipoVuelo")Long idTipoVuelo,
                     @Param("idAerolinea")Long idAerolinea);
 
-    @Query(value = "select * from vuelos where origen = :origen and destino = :destino and date(fechaPartida) = :fechaPartida",
-            nativeQuery = true)
-    List<VueloModel> mostrarVuelosPorCriterioConFecha(@Param("origen")String origen,
-                                                      @Param("destino")String destino,
-                                                      @Param("fechaPartida") LocalDate fechaPartida);
+
+    // ********** vuelos con fecha *************
+    @Query(value = "select * from vuelos where origen = :origen and destino = :destino and date(fechaPartida) = :fechaPartida", nativeQuery = true)
+    List<VueloModel> buscarVuelosDirectosConFecha(@Param("origen")String origen,
+                                                  @Param("destino")String destino,
+                                                  @Param("fechaPartida") LocalDate fechaPartida);
+
+    @Query(value = "select * from vuelos where origen = :origen and date(fechaPartida) = :fechaPartida", nativeQuery = true)
+    List<VueloModel> buscarVuelosConSoloOrigenConFecha(@Param("origen")String origen, @Param("fechaPartida") LocalDate fechaPartida);
 
 
 
 
 
 
-
-
-// ********** vuelos sin fecha
-    @Query(value = "select * from vuelos where origen = :origen and destino = :destino",
-            nativeQuery = true)
+// ********** vuelos sin fecha *************
+    @Query(value = "select * from vuelos where origen = :origen and destino = :destino", nativeQuery = true)
     List<VueloModel> buscarVuelosDirectosSinFecha(@Param("origen")String origen, @Param("destino")String destino);
 
     @Query(value = "select * from vuelos where origen = :origen", nativeQuery = true)
-    List<VueloModel> buscarVuelosConSoloOrigen(@Param("origen")String origen);
+    List<VueloModel> buscarVuelosConSoloOrigenSinFecha(@Param("origen")String origen);
 
-    @Query(value = "select * from vuelos where origen = :destinoRes and destino = :destino and fechaPartida > :fechaLlegada and date(fechaLlegada) = date(:fechaLlegada)", nativeQuery = true)
+    // revisar si puede ser de la misma fecha o otra fecha
+    @Query(value = "select * from vuelos where origen = :destinoRes and destino = :destino and fechaPartida > :fechaLlegada", nativeQuery = true)
     List<VueloModel> buscarSegundoVueloUnaEscala(@Param("destinoRes")String destinoRes,
                                                  @Param("destino")String destino,
                                                  @Param("fechaLlegada") LocalDateTime fechaLlegada);
