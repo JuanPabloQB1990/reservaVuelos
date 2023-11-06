@@ -95,61 +95,50 @@ public class VueloService {
         // 2. bogota - medellin 2023-11-06 10:30:02 -- 2023-11-06 11:20:02
         // guardar vuelos con una escala
         for (VueloModel vueloSinDestino: vuelosSinDestino) {
-            listaVuelos.clear();
+
                 // buscar vuelos segundo con destino
             List<VueloModel> segundoVueloUnaEscala = vueloRepository.buscarSegundoVueloUnaEscala(vueloSinDestino.getDestino(), destino, vueloSinDestino.getFechaLlegada());
             // 1. medellin - cali - 2023-11-06 15:30:02 -- 2023-11-06 15:30:02
             // 2. medellin - cali - 2023-11-06 14:30:02 -- 2023-11-06 15:20:02
             if (!segundoVueloUnaEscala.isEmpty()){
 
-                listaVuelos.add(vueloSinDestino); // 1. bogota - medellin 2023-11-06 12:00:02 -- 2023-11-06 13:00:02
-
                 for (VueloModel segundoVuelo: segundoVueloUnaEscala) {
-                    listaVuelos.add(segundoVuelo); // 1. medellin - cali - 2023-11-06 15:30:02 -- 2023-11-06 15:30:02
-                    EscalaModelList escala = new EscalaModelList(listaVuelos);
-                    escalas.push(listaVuelos);
-                    listaVuelos.remove(1);
+                    if (segundoVuelo.getFechaPartida().minusHours(1).isAfter(vueloSinDestino.getFechaLlegada())){
+                        listaVuelos.add(vueloSinDestino);
+                        listaVuelos.add(segundoVuelo);
+
+                        EscalaModelList escala = new EscalaModelList(listaVuelos);
+                        escalas.push(escala.getVuelos());
+                        escala.setVuelos(listaVuelos = new ArrayList<>());
+                    }
+
                 }
             }
-        }
 
-
-        return escalas;
-
-        //buscar vuelos con solo destino - tercer vuelo
-        //vuelosConEscalas.clear();
-        /*
-        for (VueloModel vueloSinDestino: vuelosSinDestino) {
-            //bogota - medellin 1:00 pm - 2:00 pm
-            //bogota - medellin 9:30 am - 10:30 am
-            //bogota - Bucaramanga 9:30 am - 10:30 am
             List<VueloModel> vuelosTerceros = vueloRepository.buscarTercerVueloDosEscalas(destino, vueloSinDestino.getFechaLlegada());
-            //pereira - cali 5:00pm - 6:00pm
-            //cucuta - cali 5:30 pm - 6:30 pm
-            //bucaramanga - cali 3:00 pm - 4:00 pm
-            if (!vuelosTerceros.isEmpty()){
-                for (VueloModel vueloTercero: vuelosTerceros) {
 
-                    // buscar vuelos intermedios
+            if (!vuelosTerceros.isEmpty()){
+
+                for (VueloModel vueloTercero: vuelosTerceros) {
+                // cucuta - cali - 2023-11-06 19:30:02 -- 2023-11-06 20:20:02
+                // pereira - cali - 2023-11-06 19:20:02 -- 2023-11-06 20:20:02
+
+                // buscar vuelos intermedios
                     List<VueloModel> vuelosIntermedios = vueloRepository.buscarVuelosIntermidiosDosEscalas(vueloSinDestino.getDestino(),vueloTercero.getOrigen(), vueloSinDestino.getFechaLlegada(), vueloTercero.getFechaPartida());
-                    //medellin - pereira 3:00 pm - 4:00
-                    //medellin - pereira 3:30 pm - 4:30
-                    //bucaramanga - cucuta 3:00 pm - 4:00
-                    if (!vuelosIntermedios.isEmpty()){
-                        vuelosConEscalas.add(vueloSinDestino); //bogota - Bucaramanga 9:30 am - 10:30 am
+                    //medellin - pereira -- 2023-11-06 15:20:02 -- 2023-11-06 16:20:02
+                    //medellin - pereira -- 2023-11-06 16:00:02 -- 2023-11-06 17:00:02
+                    if (!vuelosIntermedios.isEmpty()) {
 
                         for (VueloModel vueloIntermedio :vuelosIntermedios) {
 
-                            if (vueloIntermedio.getFechaLlegada().plusHours(1).isBefore(vueloTercero.getFechaPartida())){
-                                vuelosConEscalas.add(vueloIntermedio); //medellin - pereira 3:30 pm - 4:30
-                                vuelosConEscalas.add(vueloTercero); //pereira - cali 5:00pm - 6:00pm
+                            if (vueloTercero.getFechaPartida().minusHours(1).isAfter(vueloIntermedio.getFechaLlegada())){
+                                listaVuelos.add(vueloSinDestino);
+                                listaVuelos.add(vueloIntermedio);
+                                listaVuelos.add(vueloTercero);
 
-                                escalas.add(vuelosConEscalas);
-
-                                vuelosConEscalas.pop();
-                                vuelosConEscalas.pop();
-
-
+                                EscalaModelList escala = new EscalaModelList(listaVuelos);
+                                escalas.push(escala.getVuelos());
+                                escala.setVuelos(listaVuelos = new ArrayList<>());
                             }
 
                         }
@@ -159,8 +148,8 @@ public class VueloService {
             }
         }
 
+        return escalas;
 
-         */
     }
 
     public ResponseEntity<Object> updateFlight(Long idVuelo, VueloModel editVuelo) throws EntityNotFoundException {
