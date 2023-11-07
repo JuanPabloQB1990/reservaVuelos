@@ -6,6 +6,8 @@ import com.proyecto.reservaVuelos.excepcion.EntityNotFoundException;
 import com.proyecto.reservaVuelos.models.VueloModel;
 import com.proyecto.reservaVuelos.repositories.VueloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class VueloService {
 
     private HashMap<String, Object> datos;
 
-    public VueloModelList getFlightById(Long idVuelo) throws EntityNotFoundException {
+    public VueloModelList obtenerVueloPorId(Long idVuelo) throws EntityNotFoundException {
         Optional<VueloModel> vueloEncontrado = this.vueloRepository.findById(idVuelo);
         datos = new HashMap<>();
 
@@ -47,6 +49,26 @@ public class VueloService {
             throw new EntityNotFoundException("Vuelo no encontrado");
         }
     }
+
+    public List<VueloModelList> obtenerTodosLosVuelos() {
+        List<VueloModelList> listaVuelos =  new ArrayList<>();
+
+        List<VueloModel> vuelos = this.vueloRepository.findAll();
+            for (VueloModel vueloDirecto: vuelos) {
+                listaVuelos.add(VueloModelList.build(
+                        vueloDirecto.getCodigoVuelo(),
+                        vueloDirecto.getOrigen(),
+                        vueloDirecto.getDestino(),
+                        vueloDirecto.getFechaPartida(),
+                        vueloDirecto.getFechaLlegada(),
+                        vueloDirecto.getPrecio(),
+                        vueloDirecto.getAsientos(),
+                        vueloDirecto.getTipoVuelo().getNombre(),
+                        vueloDirecto.getAerolinea().getNombre()));
+            }
+        return listaVuelos;
+    }
+
 
     public Stack<List<VueloModelList>> obtenerTodosLosVuelosConFecha(String origen, String destino, LocalDate fechaPartida) throws EntityNotFoundException {
 
@@ -322,7 +344,28 @@ public class VueloService {
 
     }
 
-    public ResponseEntity<Object> updateFlight(Long idVuelo, VueloModel editVuelo) throws EntityNotFoundException {
+    public ResponseEntity<Object> crearVuelo(VueloModel vuelo){
+
+        this.vueloRepository.crearVuelo(
+                vuelo.getOrigen(),
+                vuelo.getDestino(),
+                vuelo.getFechaPartida(),
+                vuelo.getFechaLlegada(),
+                vuelo.getPrecio(),
+                vuelo.getAsientos(),
+                vuelo.getTipoVuelo().getIdTipoVuelo(),
+                vuelo.getAerolinea().getIdAerolinea());
+
+        datos = new HashMap<>();
+        datos.put("message", "el vuelo se guardo con exito");
+
+        return new ResponseEntity<>(
+                datos,
+                HttpStatus.CREATED
+        );
+    }
+
+    public ResponseEntity<Object> actualizarVuelo(Long idVuelo, VueloModel editVuelo) throws EntityNotFoundException {
 
         Optional<VueloModel> vueloEncontrado = vueloRepository.findById(idVuelo);
 
@@ -351,28 +394,7 @@ public class VueloService {
         }
     }
 
-    public ResponseEntity<Object> saveFlight(VueloModel vuelo){
-
-        this.vueloRepository.crearVuelo(
-                vuelo.getOrigen(),
-                vuelo.getDestino(),
-                vuelo.getFechaPartida(),
-                vuelo.getFechaLlegada(),
-                vuelo.getPrecio(),
-                vuelo.getAsientos(),
-                vuelo.getTipoVuelo().getIdTipoVuelo(),
-                vuelo.getAerolinea().getIdAerolinea());
-
-        datos = new HashMap<>();
-        datos.put("message", "el vuelo se guardo con exito");
-
-        return new ResponseEntity<>(
-                datos,
-                HttpStatus.CREATED
-        );
-    }
-
-    public ResponseEntity<Object> deleteFlightById(Long idVuelo) throws EntityNotFoundException {
+    public ResponseEntity<Object> eliminarVueloPorId(Long idVuelo) throws EntityNotFoundException {
         Optional<VueloModel> vueloEncontrado = this.vueloRepository.findById(idVuelo);
 
         if (vueloEncontrado.isPresent()){
@@ -397,5 +419,6 @@ public class VueloService {
             throw new EntityNotFoundException("Vuelo no encontrado");
         }
     }
+
 
 }

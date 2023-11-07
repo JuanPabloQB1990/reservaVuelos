@@ -41,7 +41,6 @@ public interface VueloRepository extends JpaRepository<VueloModel, Long> {
                     @Param("idTipoVuelo")Long idTipoVuelo,
                     @Param("idAerolinea")Long idAerolinea);
 
-
     // ********** vuelos con fecha *************
     @Query(value = "select * from vuelos where origen = :origen and destino = :destino and date(fechaPartida) = :fechaPartida", nativeQuery = true)
     List<VueloModel> buscarVuelosDirectosConFecha(@Param("origen")String origen,
@@ -50,11 +49,6 @@ public interface VueloRepository extends JpaRepository<VueloModel, Long> {
 
     @Query(value = "select * from vuelos where origen = :origen and date(fechaPartida) = :fechaPartida", nativeQuery = true)
     List<VueloModel> buscarVuelosConSoloOrigenConFecha(@Param("origen")String origen, @Param("fechaPartida") LocalDate fechaPartida);
-
-
-
-
-
 
 // ********** vuelos sin fecha *************
     @Query(value = "select * from vuelos where origen = :origen and destino = :destino", nativeQuery = true)
@@ -78,7 +72,6 @@ public interface VueloRepository extends JpaRepository<VueloModel, Long> {
                                                        @Param("fechaLlegadaRes1") LocalDateTime fechaLlegadaRes1,
                                                        @Param("fechaPartidaRes2") LocalDateTime fechaPartidaRes2);
 
-
-
+// ******** obtener vuelo por codigo
     Optional<VueloModel> findByCodigoVuelo(String codigoVuelo);
 }
