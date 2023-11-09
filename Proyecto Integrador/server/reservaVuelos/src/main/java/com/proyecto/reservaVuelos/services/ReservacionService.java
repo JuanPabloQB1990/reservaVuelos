@@ -39,7 +39,6 @@ public class ReservacionService {
         VueloModel vuelo = vueloService.getFlightByCodigo(codigoVuelo);
         ClienteModel pasajero = clienteService.getPasajeroByNombre(primerNombrePasajero, apellidoPasajero);
 
-
         String codigoReservacion = generarCodigoReservacion();
 
         String numeroReservacion = generarNumeroReservacion();

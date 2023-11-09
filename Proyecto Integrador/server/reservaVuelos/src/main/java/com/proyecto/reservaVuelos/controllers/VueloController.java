@@ -28,40 +28,46 @@ public class VueloController {
         this.vueloService = vueloService;
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path="{idVuelo}")
     public VueloModelList obtenerVueloPorId(@PathVariable("idVuelo") Long idVuelo) throws EntityNotFoundException {
         return this.vueloService.obtenerVueloPorId(idVuelo);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping(path = "all")
-    public List<VueloModelList> obtenerTodosLosVuelos(){
-        return this.vueloService.obtenerTodosLosVuelos();
+    public Page<VueloModelList> obtenerTodosLosVuelos(Pageable pageable) throws EntityNotFoundException {
+        return this.vueloService.obtenerTodosLosVuelos(pageable);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping
-    public Stack<List<VueloModelList>> getFlightsByCriterium(
+    public Stack<List<VueloModelList>> obtenerVuelosPorCriterio(
             @RequestParam("origen") String origen,
             @RequestParam("destino") String destino,
             @RequestParam("fechaPartida") @Nullable LocalDate fechaPartida) throws EntityNotFoundException {
-        //Pageable pageRequest = PageRequest.of(page, size);
-        if (fechaPartida == null){
+
+        if (fechaPartida == null) {
             return this.vueloService.obtenerTodosLosVuelosSinFecha(origen, destino);
         }
         return this.vueloService.obtenerTodosLosVuelosConFecha(origen, destino, fechaPartida);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> crearVuelo(@RequestBody @Valid VueloModel vuelo){
         return this.vueloService.crearVuelo(vuelo);
     }
 
-    @PutMapping(path="{idFlight}")
-    public ResponseEntity<Object> actualizarVuelo(@PathVariable("idFlight") Long idVuelo, @RequestBody VueloModel editVuelo) throws EntityNotFoundException {
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PutMapping(path="{idVuelo}")
+    public ResponseEntity<Object> actualizarVuelo(@PathVariable("idVuelo") Long idVuelo, @RequestBody VueloModel editVuelo) throws EntityNotFoundException {
         return this.vueloService.actualizarVuelo(idVuelo, editVuelo);
     }
 
-    @DeleteMapping(path = "{idFlight}")
-    public ResponseEntity<Object> eliminarVueloPorId(@PathVariable("idFlight") Long idVuelo) throws EntityNotFoundException {
+    @CrossOrigin(origins = "http://localhost:5173")
+    @DeleteMapping(path = "{idVuelo}")
+    public ResponseEntity<Object> eliminarVueloPorId(@PathVariable("idVuelo") Long idVuelo) throws EntityNotFoundException {
         return this.vueloService.eliminarVueloPorId(idVuelo);
 
     }

@@ -17,10 +17,8 @@ public class TipoVueloModel {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long idTipoVuelo;
-
     @Column
     private String nombre;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "tipoVuelo", cascade = CascadeType.ALL)
     private List<VueloModel> vuelos = new ArrayList<>();
 

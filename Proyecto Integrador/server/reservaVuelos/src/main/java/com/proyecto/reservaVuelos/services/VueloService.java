@@ -30,7 +30,6 @@ public class VueloService {
 
     public VueloModelList obtenerVueloPorId(Long idVuelo) throws EntityNotFoundException {
         Optional<VueloModel> vueloEncontrado = this.vueloRepository.findById(idVuelo);
-        datos = new HashMap<>();
 
         if(vueloEncontrado.isPresent()){
             return VueloModelList.build(
@@ -50,29 +49,34 @@ public class VueloService {
         }
     }
 
-    public List<VueloModelList> obtenerTodosLosVuelos() {
-        List<VueloModelList> listaVuelos =  new ArrayList<>();
+    public Page<VueloModelList> obtenerTodosLosVuelos(Pageable pageable) throws EntityNotFoundException {
 
-        List<VueloModel> vuelos = this.vueloRepository.findAll();
-            for (VueloModel vueloDirecto: vuelos) {
-                listaVuelos.add(VueloModelList.build(
-                        vueloDirecto.getCodigoVuelo(),
-                        vueloDirecto.getOrigen(),
-                        vueloDirecto.getDestino(),
-                        vueloDirecto.getFechaPartida(),
-                        vueloDirecto.getFechaLlegada(),
-                        vueloDirecto.getPrecio(),
-                        vueloDirecto.getAsientos(),
-                        vueloDirecto.getTipoVuelo().getNombre(),
-                        vueloDirecto.getAerolinea().getNombre()));
-            }
-        return listaVuelos;
+        Page<VueloModel> vuelos = this.vueloRepository.findAll(pageable);
+
+        if (vuelos.getTotalElements() > 0){
+            Page<VueloModelList> vuelosDto = vuelos
+                    .map(vuelo -> VueloModelList.build(
+                            vuelo.getCodigoVuelo(),
+                            vuelo.getOrigen(),
+                            vuelo.getDestino(),
+                            vuelo.getFechaPartida(),
+                            vuelo.getFechaLlegada(),
+                            vuelo.getPrecio(),
+                            vuelo.getAsientos(),
+                            vuelo.getTipoVuelo().getNombre(),
+                            vuelo.getAerolinea().getNombre()));
+
+            return vuelosDto;
+        }else{
+            throw new EntityNotFoundException("no hay vuelos programados");
+        }
+
     }
-
 
     public Stack<List<VueloModelList>> obtenerTodosLosVuelosConFecha(String origen, String destino, LocalDate fechaPartida) throws EntityNotFoundException {
 
         Stack<List<VueloModelList>> escalas = new Stack<>();
+
         List<VueloModelList> listaVuelos = new ArrayList<>();
 
         List<VueloModel> vuelosDirectosConFecha =  vueloRepository.buscarVuelosDirectosConFecha(origen, destino, fechaPartida);
@@ -226,9 +230,13 @@ public class VueloService {
                         vueloDirecto.getAsientos(),
                         vueloDirecto.getTipoVuelo().getNombre(),
                         vueloDirecto.getAerolinea().getNombre()));
+
+                EscalaModelList escala = new EscalaModelList(listaVuelos);
+                escalas.push(escala.getVuelos());
+                escala.setVuelos(listaVuelos = new ArrayList<>());
             }
 
-            escalas.add(new EscalaModelList(listaVuelos).getVuelos());
+            //escalas.add(new EscalaModelList(listaVuelos).getVuelos());
         }
 
         // buscar vuelos con solo origen -> primeros vuelos

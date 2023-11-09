@@ -19,6 +19,7 @@ public class AerolineaController {
         this.aerolineaService = aerolineaService;
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping
     public List<AerolineaModel> getAerolineas(){
         return this.aerolineaService.getAerolineas();
