@@ -34,8 +34,8 @@ public class ReservacionService {
             String codigoVuelo,
             LocalDateTime fechaReservacion,
             String primerNombrePasajero,
-            String apellidoPasajero
-    ) throws EntityNotFoundException {
+            String apellidoPasajero,
+            Long numeroAsientosReservar) throws EntityNotFoundException {
         //Obtener el vuelo y pasajero correspondientes - Creo metodo en vuelo y pasajero
         VueloModel vuelo = vueloService.getFlightByCodigo(codigoVuelo);
         ClienteModel pasajero = clienteService.getPasajeroByNombre(primerNombrePasajero, apellidoPasajero);
@@ -43,7 +43,7 @@ public class ReservacionService {
 
         String codigoReservacion = generarCodigoReservacion();
 
-        String numeroReservacion = generarNumeroReservacion();
+        int numeroReservacion = generarNumeroReservacion();
 
         // Creacion
         ReservacionModel reservacion = new ReservacionModel(
@@ -72,15 +72,31 @@ public class ReservacionService {
         }
     }
 
+    public void actualizarReservacionPorCliente(String primerNombrePasajero, String apellidoPasajero, ReservacionModel nuevaReservacion) throws EntityNotFoundException {
+        // Obtener la lista de reservaciones del cliente con el nombre y apellido proporcionados
+        List<ReservacionModel> reservaciones = reservacionRepository.findByPasajero_PrimerNombreAndPasajero_Apellido(primerNombrePasajero, apellidoPasajero);
+
+        if (!reservaciones.isEmpty()) {
+            // Actualizar cada reserva encontrada con los nuevos datos
+            for (ReservacionModel reservacion : reservaciones) {
+                reservacion.setCodigoReservacion(nuevaReservacion.getCodigoReservacion());
+                reservacion.setFechaReservacion(nuevaReservacion.getFechaReservacion());
+                // Puedes actualizar otros campos según tus necesidades
+                // ...
+
+                reservacionRepository.save(reservacion); // Guardar la reserva actualizada
+            }
+        } else {
+            throw new EntityNotFoundException("No se encontraron reservaciones para el cliente especificado");
+        }
+    }
+
 
     private String generarCodigoReservacion() {
         return UUID.randomUUID().toString();
     }
 
-    private String generarNumeroReservacion() {
-        return "12345"; //Ejemplo
+    private int generarNumeroReservacion() {
+        return Integer.parseInt("12345"); //Ejemplo
     }
-
-
-
 }

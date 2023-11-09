@@ -28,13 +28,13 @@ public class ReservacionModel {
 
     private LocalDateTime fechaReservacion;
 
-    private String numeroReservacion;
+    private int numeroReservacion;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "idPasajero")
     private ClienteModel pasajero;
 
-    public ReservacionModel(String codigoReservacion, VueloModel vuelo, LocalDateTime fechaReservacion, String numeroReservacion, ClienteModel pasajero) {
+    public ReservacionModel(String codigoReservacion, VueloModel vuelo, LocalDateTime fechaReservacion, int numeroReservacion, ClienteModel pasajero) {
         this.codigoReservacion = codigoReservacion;
         this.vuelo = vuelo;
         this.fechaReservacion = fechaReservacion;
@@ -66,11 +66,11 @@ public class ReservacionModel {
         this.fechaReservacion = fechaReservacion;
     }
 
-    public String getNumeroReservacion() {
+    public int getNumeroReservacion() {
         return numeroReservacion;
     }
 
-    public void setNumeroReservacion(String numeroReservacion) {
+    public void setNumeroReservacion(int numeroReservacion) {
         this.numeroReservacion = numeroReservacion;
     }
 

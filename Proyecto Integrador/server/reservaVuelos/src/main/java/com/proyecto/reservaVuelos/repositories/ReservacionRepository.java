@@ -10,5 +10,6 @@ import java.util.List;
 public interface ReservacionRepository extends JpaRepository<ReservacionModel, Long> {
     List<ReservacionModel> findByCliente_PrimerNombreAndPasajero_Apellido(String primerNombrePasajero, String apellidoPasajero);
 
+    List<ReservacionModel> findByPasajero_PrimerNombreAndPasajero_Apellido(String primerNombrePasajero, String apellidoPasajero);
 }
 
