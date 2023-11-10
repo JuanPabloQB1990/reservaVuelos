@@ -12,13 +12,14 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "v1/aerolineas")
 public class AerolineaController {
-    AerolineaService aerolineaService;
+    private AerolineaService aerolineaService;
 
     @Autowired
     public AerolineaController(AerolineaService aerolineaService) {
         this.aerolineaService = aerolineaService;
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping
     public List<AerolineaModel> getAerolineas(){
         return this.aerolineaService.getAerolineas();

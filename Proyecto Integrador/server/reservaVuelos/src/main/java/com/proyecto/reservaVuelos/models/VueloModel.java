@@ -34,7 +34,7 @@ public class VueloModel {
     @NotNull(message = "la fecha de llegada del vuelo es obligatorio")
     private LocalDateTime fechaLlegada;
 
-    @NotNull(message = "el precio del vuelo es obligatorio")
+    @Min(100)
     private double precio;
 
     @NotNull(message = "el numero de asientos del vuelo es obligatorio")

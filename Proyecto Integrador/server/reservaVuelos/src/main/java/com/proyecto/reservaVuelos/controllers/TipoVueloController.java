@@ -4,6 +4,7 @@ import com.proyecto.reservaVuelos.excepcion.EntityNotFoundException;
 import com.proyecto.reservaVuelos.models.TipoVueloModel;
 import com.proyecto.reservaVuelos.services.TipoVueloService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +14,14 @@ import java.util.List;
 @RequestMapping(path = "v1/typeFlights")
 public class TipoVueloController {
 
-    TipoVueloService tipoVueloService;
+    private TipoVueloService tipoVueloService;
 
     @Autowired
     public TipoVueloController(TipoVueloService tipoVueloService) {
         this.tipoVueloService = tipoVueloService;
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping
     public List<TipoVueloModel> getTipoVuelos(){
         return this.tipoVueloService.getTipoVuelos();

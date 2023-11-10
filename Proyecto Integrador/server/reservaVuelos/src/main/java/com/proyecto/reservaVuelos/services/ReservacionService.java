@@ -38,6 +38,7 @@ public class ReservacionService {
             LocalDateTime fechaSalida = reservacionModel.getFechaReservacion();
             Long numeroAsientosReservar = reservacionModel.getVuelo().getAsientos();
 
+
             if (fechaSalida.minusHours(3).isBefore(LocalDateTime.now())) {
                 return ResponseEntity.badRequest().body("La reserva debe realizarse con al menos 3 horas de anticipación.");
             } else {
@@ -68,7 +69,7 @@ public class ReservacionService {
 
                     // Actualizar el número de asientos disponibles
                     vuelo.setAsientos(vuelo.getAsientos() - numeroAsientosReservar);
-                    vueloService.updateFlight(vuelo.getIdVuelo(), vuelo);
+                    vueloService.actualizarVuelo(vuelo.getIdVuelo(), vuelo);
 
                     System.out.println("Reserva realizada con éxito.");
                     return ResponseEntity.ok(reservacion);
