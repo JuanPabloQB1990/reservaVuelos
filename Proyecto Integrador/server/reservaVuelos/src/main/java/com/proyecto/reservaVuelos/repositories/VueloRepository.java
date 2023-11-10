@@ -32,7 +32,7 @@ public interface VueloRepository extends JpaRepository<VueloModel, Long> {
     @Transactional
     @Modifying
     @Query(value = "{call insert_vuelo(:origen, :destino, :fechaPartida, :fechaLlegada, :precio, :asientos, :idTipoVuelo, :idAerolinea)}", nativeQuery = true)
-    void crearVuelo(@Param("origen")String origen,
+    VueloModel crearVuelo(@Param("origen")String origen,
                     @Param("destino")String destino,
                     @Param("fechaPartida") LocalDateTime fechaPartida,
                     @Param("fechaLlegada")LocalDateTime fechaLlegada,

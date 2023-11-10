@@ -24,5 +24,8 @@ public class AerolineaModel {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "aerolinea", cascade = CascadeType.ALL)
     private List<VueloModel> vuelos = new ArrayList<>();
 
-
+    public AerolineaModel(Long idAerolinea, String nombre) {
+        this.idAerolinea = idAerolinea;
+        this.nombre = nombre;
+    }
 }

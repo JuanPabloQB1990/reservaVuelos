@@ -300,7 +300,7 @@ public class VueloService {
 
                         for (VueloModel vueloIntermedio :vuelosIntermedios) {
 
-                            if (vueloTercero.getFechaPartida().minusHours(1).isAfter(vueloIntermedio.getFechaLlegada())){
+                            if (vueloTercero.getFechaPartida().minusHours(1).isAfter(vueloIntermedio.getFechaLlegada()) && vueloIntermedio.getFechaPartida().minusHours(1).isAfter(primerVuelo.getFechaLlegada())){
                                 listaVuelos.add(VueloModelList.build(
                                         primerVuelo.getCodigoVuelo(),
                                         primerVuelo.getOrigen(),
@@ -354,7 +354,7 @@ public class VueloService {
 
     public ResponseEntity<Object> crearVuelo(VueloModel vuelo){
 
-        this.vueloRepository.crearVuelo(
+        VueloModel vuelo1 = this.vueloRepository.crearVuelo(
                 vuelo.getOrigen(),
                 vuelo.getDestino(),
                 vuelo.getFechaPartida(),
@@ -405,13 +405,13 @@ public class VueloService {
     public ResponseEntity<Object> eliminarVueloPorId(Long idVuelo) throws EntityNotFoundException {
         Optional<VueloModel> vueloEncontrado = this.vueloRepository.findById(idVuelo);
 
-        if (vueloEncontrado.isPresent()){
+        if (vueloEncontrado.isPresent()) {
             this.vueloRepository.deleteById(idVuelo);
             datos = new HashMap<>();
             datos.put("message", "el vuelo se elimino con exito");
             return new ResponseEntity<>(
                     datos,
-                    HttpStatusCode.valueOf(200)
+                    HttpStatusCode.valueOf(204)
             );
         }else{
             throw new EntityNotFoundException("El vuelo no se encuantra programado");
@@ -426,6 +426,7 @@ public class VueloService {
         } else {
             throw new EntityNotFoundException("Vuelo no encontrado");
         }
+
     }
 
 
