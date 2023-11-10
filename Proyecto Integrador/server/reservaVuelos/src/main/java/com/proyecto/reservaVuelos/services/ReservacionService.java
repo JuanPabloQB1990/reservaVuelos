@@ -6,7 +6,10 @@ import com.proyecto.reservaVuelos.models.VueloModel;
 import com.proyecto.reservaVuelos.models.ReservacionModel;
 import com.proyecto.reservaVuelos.repositories.ReservacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,40 +33,62 @@ public class ReservacionService {
         this.clienteService = clienteService;
     }
 
-    public ReservacionModel crearReservacion(
-            String codigoVuelo,
-            LocalDateTime fechaReservacion,
-            String primerNombrePasajero,
-            String apellidoPasajero,
-            Long numeroAsientosReservar) throws EntityNotFoundException {
-        //Obtener el vuelo y pasajero correspondientes - Creo metodo en vuelo y pasajero
-        VueloModel vuelo = vueloService.getFlightByCodigo(codigoVuelo);
-        ClienteModel pasajero = clienteService.getPasajeroByNombre(primerNombrePasajero, apellidoPasajero);
+    public ResponseEntity<Object> crearReservacion(@RequestBody ReservacionModel reservacionModel) {
+        try {
+            LocalDateTime fechaSalida = reservacionModel.getFechaReservacion();
+            Long numeroAsientosReservar = reservacionModel.getVuelo().getAsientos();
 
+            if (fechaSalida.minusHours(3).isBefore(LocalDateTime.now())) {
+                return ResponseEntity.badRequest().body("La reserva debe realizarse con al menos 3 horas de anticipación.");
+            } else {
+                // Obtener el vuelo
+                VueloModel vuelo = vueloService.getFlightByCodigo(reservacionModel.getVuelo().getCodigoVuelo());
 
-        String codigoReservacion = generarCodigoReservacion();
+                // Asientos disponibles
+                if (vuelo.getAsientos() >= numeroAsientosReservar) {
+                    // Obtener el pasajero correspondiente
+                    ClienteModel pasajero = clienteService.getPasajeroByNombre(
+                            reservacionModel.getPasajero().getNombre(),
+                            reservacionModel.getPasajero().getApellido()
+                    );
 
-        int numeroReservacion = generarNumeroReservacion();
+                    // Crear y guardar la reserva en la base de datos
+                    String codigoReservacion = generarCodigoReservacion();
+                    int numeroReservacion = generarNumeroReservacion();
 
-        // Creacion
-        ReservacionModel reservacion = new ReservacionModel(
-                codigoReservacion,
-                vuelo,
-                fechaReservacion,
-                numeroReservacion,
-                pasajero
-        );
+                    ReservacionModel reservacion = new ReservacionModel(
+                            codigoReservacion,
+                            vuelo,
+                            fechaSalida,
+                            numeroReservacion,
+                            pasajero
+                    );
 
-        // Guardar la reserva en la base de datos - Creo metodo en ReservacionRepository
-        return reservacionRepository.save(reservacion);
+                    reservacionRepository.save(reservacion);
+
+                    // Actualizar el número de asientos disponibles
+                    vuelo.setAsientos(vuelo.getAsientos() - numeroAsientosReservar);
+                    vueloService.updateFlight(vuelo.getIdVuelo(), vuelo);
+
+                    System.out.println("Reserva realizada con éxito.");
+                    return ResponseEntity.ok(reservacion);
+                } else {
+                    return ResponseEntity.badRequest().body("No hay suficientes asientos disponibles para este vuelo.");
+                }
+            }
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body("Error al crear la reservación: " + e.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+        }
     }
 
+
     public void eliminarReservacionPorCliente(String primerNombrePasajero, String apellidoPasajero) throws EntityNotFoundException {
-        // Obtener la lista de reservaciones del cliente con el nombre y apellido proporcionados
+        // Obtener la lista de reservaciones
         List<ReservacionModel> reservaciones = reservacionRepository.findByCliente_PrimerNombreAndPasajero_Apellido(primerNombrePasajero, apellidoPasajero);
 
         if (!reservaciones.isEmpty()) {
-            // Eliminar cada reserva encontrada
             for (ReservacionModel reservacion : reservaciones) {
                 reservacionRepository.delete(reservacion);
             }
@@ -73,7 +98,6 @@ public class ReservacionService {
     }
 
     public void actualizarReservacionPorCliente(String primerNombrePasajero, String apellidoPasajero, ReservacionModel nuevaReservacion) throws EntityNotFoundException {
-        // Obtener la lista de reservaciones del cliente con el nombre y apellido proporcionados
         List<ReservacionModel> reservaciones = reservacionRepository.findByPasajero_PrimerNombreAndPasajero_Apellido(primerNombrePasajero, apellidoPasajero);
 
         if (!reservaciones.isEmpty()) {
@@ -81,8 +105,6 @@ public class ReservacionService {
             for (ReservacionModel reservacion : reservaciones) {
                 reservacion.setCodigoReservacion(nuevaReservacion.getCodigoReservacion());
                 reservacion.setFechaReservacion(nuevaReservacion.getFechaReservacion());
-                // Puedes actualizar otros campos según tus necesidades
-                // ...
 
                 reservacionRepository.save(reservacion); // Guardar la reserva actualizada
             }
