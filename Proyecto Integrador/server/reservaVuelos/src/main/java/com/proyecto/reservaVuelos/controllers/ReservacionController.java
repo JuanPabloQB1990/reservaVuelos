@@ -1,18 +1,22 @@
 package com.proyecto.reservaVuelos.controllers;
 
+import com.proyecto.reservaVuelos.dto.CrearReservaDto;
 import com.proyecto.reservaVuelos.excepcion.EntityNotFoundException;
 import com.proyecto.reservaVuelos.models.ReservacionModel;
 import com.proyecto.reservaVuelos.repositories.ReservacionRepository;
 import com.proyecto.reservaVuelos.models.VueloModel;
 import com.proyecto.reservaVuelos.services.ReservacionService;
 import com.proyecto.reservaVuelos.services.VueloService;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sun.security.krb5.internal.ccache.MemoryCredentialsCache;
+
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/reservaciones")
@@ -29,34 +33,28 @@ public class ReservacionController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> crearReservacion(@RequestBody ReservacionModel reservacionModel) {
-        return reservacionService.crearReservacion(reservacionModel);
+    public ResponseEntity<Object> crearReservacion(@RequestBody CrearReservaDto reserva) {
+        return reservacionService.crearReservacion(reserva);
     }
 
-    @DeleteMapping("/eliminarReservacionPorCliente")
-    public ResponseEntity<String> eliminarReservacionPorCliente(
-            @RequestParam("primerNombrePasajero") String primerNombrePasajero,
-            @RequestParam("apellidoPasajero") String apellidoPasajero
-    ) {
+    @DeleteMapping("{idReservacion}")
+    public ResponseEntity<Object> cancelarReservacionPorId(@PathVariable Long idReservacion1, @PathVariable @Nullable Long idReservacion2, @PathVariable @Nullable Long idReservacion3) {
         try {
-            reservacionService.eliminarReservacionPorCliente(primerNombrePasajero, apellidoPasajero);
-            return ResponseEntity.ok("Reservaciones eliminadas correctamente para el cliente");
+             return reservacionService.cancelarReservacionPorId(idReservacion1, idReservacion2, idReservacion3);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("Error al eliminar las reservaciones: " + e.getMessage());
         }
     }
 
-    @PutMapping("/actualizarReservacionPorCliente")
-    public ResponseEntity<String> actualizarReservacionPorCliente(
-            @RequestParam("primerNombrePasajero") String primerNombrePasajero,
-            @RequestParam("apellidoPasajero") String apellidoPasajero,
-            @RequestBody ReservacionModel nuevaReservacion
-    ) {
-        try {
-            reservacionService.actualizarReservacionPorCliente(primerNombrePasajero, apellidoPasajero, nuevaReservacion);
-            return ResponseEntity.ok("Reservación actualizada correctamente para el cliente");
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.badRequest().body("Error al actualizar la reservación: " + e.getMessage());
-        }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @GetMapping(path = "{idReserva}")
+    public ReservacionModel obtenerReservaPorId(@PathVariable Long idReserva){
+        return this.reservacionService.obtenerReservaPorId(idReserva);
+    }
+
+    @GetMapping(path = "cliente/{idCliente}")
+    public List<ReservacionModel> obtenerReservacionesPorIdCliente(@PathVariable Long idCliente) throws EntityNotFoundException {
+        return this.reservacionService.obtenerReservacionesPorIdCliente(idCliente);
     }
 }

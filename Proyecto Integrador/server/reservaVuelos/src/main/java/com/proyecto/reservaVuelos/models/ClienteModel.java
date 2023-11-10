@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
-@Table(name = "pasajeros")
+@Table(name = "cliente")
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -15,7 +18,7 @@ public class ClienteModel {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long idPasajero;
+    private Long idCliente;
 
     @Column
     private String nombre;
@@ -31,5 +34,8 @@ public class ClienteModel {
     private String ciudad;
     @Column
     private String direccion;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ReservacionModel> reservaciones = new ArrayList<>();
 
 }

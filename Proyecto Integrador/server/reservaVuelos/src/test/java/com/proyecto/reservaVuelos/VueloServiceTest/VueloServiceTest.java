@@ -72,7 +72,7 @@ public class VueloServiceTest {
                 );
 
         vuelo2 = new VueloModel(
-                2L,
+                1L,
                 "AV002",
                 "Pereira",
                 "Manizales",
@@ -374,16 +374,6 @@ public class VueloServiceTest {
     @DisplayName("validar creacion de vuelos")
     public void testCrearVuelos() throws EntityNotFoundException {
 
-        when(this.vueloRepository.crearVuelo(
-                vuelo1.getOrigen(),
-                vuelo1.getDestino(),
-                vuelo1.getFechaPartida(),
-                vuelo1.getFechaLlegada(),
-                vuelo1.getPrecio(),
-                vuelo1.getAsientos(),
-                vuelo1.getTipoVuelo().getIdTipoVuelo(),
-                vuelo1.getAerolinea().getIdAerolinea())).thenReturn(vuelo1);
-
         ResponseEntity<Object> vueloCreado = this.vueloService.crearVuelo(vuelo1);
 
         assertNotNull(vuelo1);
@@ -447,13 +437,11 @@ public class VueloServiceTest {
     @DisplayName("validar eliminacion vuelo excepcion")
     public void testEliminarVueloExcepcion() throws EntityNotFoundException {
 
-        when(vueloRepository.findById(1L)).thenReturn(Optional.ofNullable(null));
-
-        this.vueloService.eliminarVueloPorId(1L);
+        when(vueloRepository.findById(any())).thenReturn(Optional.ofNullable(null));
 
         verify(vueloRepository, never()).deleteById(1L);
 
-        assertThrows(EntityNotFoundException.class, ()-> this.vueloService.eliminarVueloPorId(1L)).getMessage();
+        assertThrows(EntityNotFoundException.class, ()-> this.vueloService.eliminarVueloPorId(any())).getMessage();
     }
 
 }

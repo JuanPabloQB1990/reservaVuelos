@@ -1,5 +1,7 @@
 package com.proyecto.reservaVuelos.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,60 +25,69 @@ public class ReservacionModel {
     private String codigoReservacion;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "idVuelo")
-    private VueloModel vuelo;
+    @JoinColumn(name = "idVuelo1")
+    private VueloModel vuelo1;
+
+    @Nullable
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "idVuelo2")
+    private VueloModel vuelo2;
+
+    @Nullable
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "idVuelo3")
+    private VueloModel vuelo3;
 
     private LocalDateTime fechaReservacion;
 
-    private int numeroReservacion;
+    private int numeroAsientos;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "idPasajero")
-    private ClienteModel pasajero;
+    @JoinColumn(name = "idCliente")
+    private ClienteModel cliente;
 
-    public ReservacionModel(String codigoReservacion, VueloModel vuelo, LocalDateTime fechaReservacion, int numeroReservacion, ClienteModel pasajero) {
+    public ReservacionModel(String codigoReservacion,
+                            VueloModel vuelo1,
+                            LocalDateTime fechaReservacion,
+                            int numeroAsientos,
+                            ClienteModel cliente) {
         this.codigoReservacion = codigoReservacion;
-        this.vuelo = vuelo;
+        this.vuelo1 = vuelo1;
         this.fechaReservacion = fechaReservacion;
-        this.numeroReservacion = numeroReservacion;
-        this.pasajero = pasajero;
+        this.numeroAsientos = numeroAsientos;
+        this.cliente = cliente;
     }
 
-    public String getCodigoReservacion() {
-        return codigoReservacion;
-    }
-
-    public void setCodigoReservacion(String codigoReservacion) {
+    public ReservacionModel(String codigoReservacion,
+                            VueloModel vuelo1,
+                            VueloModel vuelo2,
+                            LocalDateTime fechaReservacion,
+                            int numeroAsientos,
+                            ClienteModel cliente) {
         this.codigoReservacion = codigoReservacion;
-    }
-
-    public VueloModel getVuelo() {
-        return vuelo;
-    }
-
-    public void setVuelo(VueloModel vuelo) {
-        this.vuelo = vuelo;
-    }
-
-    public LocalDateTime getFechaReservacion() {
-        return fechaReservacion;
-    }
-
-    public void setFechaReservacion(LocalDateTime fechaReservacion) {
+        this.vuelo1 = vuelo1;
+        this.vuelo2 = vuelo2;
         this.fechaReservacion = fechaReservacion;
+        this.numeroAsientos = numeroAsientos;
+        this.cliente = cliente;
     }
 
-    public int getNumeroReservacion() {
-        return numeroReservacion;
+    public ReservacionModel(String codigoReservacion,
+                            VueloModel vuelo1,
+                            VueloModel vuelo2,
+                            VueloModel vuelo3,
+                            LocalDateTime fechaReservacion,
+                            int numeroAsientos,
+                            ClienteModel cliente) {
+        this.codigoReservacion = codigoReservacion;
+        this.vuelo1 = vuelo1;
+        this.vuelo2 = vuelo2;
+        this.vuelo3 = vuelo3;
+        this.fechaReservacion = fechaReservacion;
+        this.numeroAsientos = numeroAsientos;
+        this.cliente = cliente;
     }
 
-    public void setNumeroReservacion(int numeroReservacion) {
-        this.numeroReservacion = numeroReservacion;
-    }
 
-    public ClienteModel getPasajero() {return pasajero;}
-
-    public void setPasajero(ClienteModel pasajero) {
-        this.pasajero = pasajero;
-    }
 }

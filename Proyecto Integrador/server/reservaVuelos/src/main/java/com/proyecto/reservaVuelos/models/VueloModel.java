@@ -6,10 +6,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -34,12 +35,10 @@ public class VueloModel {
     @NotNull(message = "la fecha de llegada del vuelo es obligatorio")
     private LocalDateTime fechaLlegada;
 
-    @Min(100)
     private double precio;
 
-    @NotNull(message = "el numero de asientos del vuelo es obligatorio")
-    @Min(1)
-    private long asientos;
+    @Min(20)
+    private int asientos;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idTipoVuelo")
@@ -51,5 +50,43 @@ public class VueloModel {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private AerolineaModel aerolinea;
 
+    public void setIdVuelo(Long idVuelo) {
+        this.idVuelo = idVuelo;
+    }
 
+    public void setCodigoVuelo(String codigoVuelo) {
+        this.codigoVuelo = codigoVuelo;
+    }
+
+    public void setOrigen(String origen) {
+        this.origen = origen;
+    }
+
+    public void setDestino(String destino) {
+        this.destino = destino;
+    }
+
+    public void setFechaPartida(LocalDateTime fechaPartida) {
+        this.fechaPartida = fechaPartida;
+    }
+
+    public void setFechaLlegada(LocalDateTime fechaLlegada) {
+        this.fechaLlegada = fechaLlegada;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public void setAsientos(int asientos) {
+        this.asientos = asientos;
+    }
+
+    public void setTipoVuelo(TipoVueloModel tipoVuelo) {
+        this.tipoVuelo = tipoVuelo;
+    }
+
+    public void setAerolinea(AerolineaModel aerolinea) {
+        this.aerolinea = aerolinea;
+    }
 }

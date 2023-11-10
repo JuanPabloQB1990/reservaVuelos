@@ -25,19 +25,19 @@ public interface VueloRepository extends JpaRepository<VueloModel, Long> {
                          @Param("fechaPartida") LocalDateTime fechaPartida,
                          @Param("fechaLlegada")LocalDateTime fechaLlegada,
                          @Param("precio")Double precio,
-                         @Param("asientos")Long asientos,
+                         @Param("asientos")int asientos,
                          @Param("idTipoVuelo")Long idTipoVuelo,
                          @Param("idAerolinea")Long idAerolinea);
 
     @Transactional
     @Modifying
     @Query(value = "{call insert_vuelo(:origen, :destino, :fechaPartida, :fechaLlegada, :precio, :asientos, :idTipoVuelo, :idAerolinea)}", nativeQuery = true)
-    VueloModel crearVuelo(@Param("origen")String origen,
+    void crearVuelo(@Param("origen")String origen,
                     @Param("destino")String destino,
                     @Param("fechaPartida") LocalDateTime fechaPartida,
                     @Param("fechaLlegada")LocalDateTime fechaLlegada,
                     @Param("precio")Double precio,
-                    @Param("asientos")Long asientos,
+                    @Param("asientos")int asientos,
                     @Param("idTipoVuelo")Long idTipoVuelo,
                     @Param("idAerolinea")Long idAerolinea);
 

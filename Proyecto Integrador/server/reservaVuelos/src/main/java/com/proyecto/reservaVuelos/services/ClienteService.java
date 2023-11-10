@@ -6,34 +6,33 @@ import com.proyecto.reservaVuelos.repositories.ClienteRepository;
 
 import com.proyecto.reservaVuelos.excepcion.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ClienteService {
 
-    ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository;
 
     @Autowired
     public ClienteService(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
 
-    public ArrayList<ClienteModel> getPasajeros(){
-        return (ArrayList<ClienteModel>) clienteRepository.findAll();
+    public ClienteModel obtenerClientePorId(Long idCliente){
+        return this.clienteRepository.findById(idCliente).get();
     }
 
-    public ClienteModel getPasajeroByNombre(String primerNombre, String apellido) throws EntityNotFoundException {
-        Optional<ClienteModel> pasajeroEncontrado = clienteRepository.findByNombreAndApellido(primerNombre, apellido);
+    public ResponseEntity<Object> registrarCliente(ClienteModel cliente) {
 
-        if (pasajeroEncontrado.isPresent()) {
-            return pasajeroEncontrado.get();
-        } else {
-            throw new EntityNotFoundException("Pasajero no encontrado");
-        }
+        ClienteModel clienteRegistrado = this.clienteRepository.save(cliente);
+
+        return new ResponseEntity("cliente creado", HttpStatusCode.valueOf(200));
     }
-
 }
 

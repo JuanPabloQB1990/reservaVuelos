@@ -42,32 +42,33 @@ INSERT INTO `aerolineas` VALUES (1,'Avianca'),(2,'Easyfly'),(3,'Satena'),(4,'Win
 UNLOCK TABLES;
 
 --
--- Table structure for table `pasajeros`
+-- Table structure for table `cliente`
 --
 
-DROP TABLE IF EXISTS `pasajeros`;
+DROP TABLE IF EXISTS `cliente`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `pasajeros` (
-  `idPasajero` bigint NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(255) DEFAULT NULL,
+CREATE TABLE `cliente` (
+  `idCliente` bigint NOT NULL AUTO_INCREMENT,
   `apellido` varchar(255) DEFAULT NULL,
-  `telefono` varchar(255) DEFAULT NULL,
-  `correo` varchar(255) DEFAULT NULL,
-  `pais` varchar(255) DEFAULT NULL,
   `ciudad` varchar(255) DEFAULT NULL,
+  `correo` varchar(255) DEFAULT NULL,
   `direccion` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`idPasajero`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `nombre` varchar(255) DEFAULT NULL,
+  `pais` varchar(255) DEFAULT NULL,
+  `telefono` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`idCliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pasajeros`
+-- Dumping data for table `cliente`
 --
 
-LOCK TABLES `pasajeros` WRITE;
-/*!40000 ALTER TABLE `pasajeros` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pasajeros` ENABLE KEYS */;
+LOCK TABLES `cliente` WRITE;
+/*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
+INSERT INTO `cliente` VALUES (1,'Quintero','Medellin','juan@gmail.com','cl 45 no 54 f 45','Juan Pablo','Colombia','346120455');
+/*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -79,16 +80,23 @@ DROP TABLE IF EXISTS `reservaciones`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reservaciones` (
   `idReservacion` bigint NOT NULL AUTO_INCREMENT,
-  `idVuelo` bigint DEFAULT NULL,
-  `fechaReservacion` datetime DEFAULT NULL,
-  `numeroAsientos` int DEFAULT NULL,
-  `idPasajero` bigint DEFAULT NULL,
+  `codigoReservacion` varchar(255) DEFAULT NULL,
+  `idVuelo1` bigint DEFAULT NULL,
+  `idVuelo2` bigint DEFAULT NULL,
+  `idVuelo3` bigint DEFAULT NULL,
+  `fechaReservacion` datetime(6) DEFAULT NULL,
+  `numeroAsientos` int NOT NULL,
+  `idCliente` bigint DEFAULT NULL,
   PRIMARY KEY (`idReservacion`),
-  KEY `idPasajero` (`idPasajero`),
-  KEY `idVuelo` (`idVuelo`),
-  CONSTRAINT `reservaciones_ibfk_1` FOREIGN KEY (`idPasajero`) REFERENCES `pasajeros` (`idPasajero`),
-  CONSTRAINT `reservaciones_ibfk_2` FOREIGN KEY (`idVuelo`) REFERENCES `vuelos` (`idVuelo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `idCliente` (`idCliente`),
+  KEY `idVuelo1` (`idVuelo1`),
+  KEY `idVuelo2` (`idVuelo2`),
+  KEY `idVuelo3` (`idVuelo3`),
+  CONSTRAINT `reservaciones_ibfk_1` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`),
+  CONSTRAINT `reservaciones_ibfk_2` FOREIGN KEY (`idVuelo1`) REFERENCES `vuelos` (`idVuelo`),
+  CONSTRAINT `reservaciones_ibfk_3` FOREIGN KEY (`idVuelo2`) REFERENCES `vuelos` (`idVuelo`),
+  CONSTRAINT `reservaciones_ibfk_4` FOREIGN KEY (`idVuelo3`) REFERENCES `vuelos` (`idVuelo`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,6 +105,7 @@ CREATE TABLE `reservaciones` (
 
 LOCK TABLES `reservaciones` WRITE;
 /*!40000 ALTER TABLE `reservaciones` DISABLE KEYS */;
+INSERT INTO `reservaciones` VALUES (1,'c3b9e990-f410-446b-acd7-c716af0943d3',1,2,NULL,'2023-11-10 14:36:52.252520',2,1),(2,'98dd1d97-dbbe-442d-8840-91f88dd6a386',3,4,NULL,'2023-11-10 15:52:28.697451',2,1);
 /*!40000 ALTER TABLE `reservaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -139,7 +148,7 @@ CREATE TABLE `vuelos` (
   `fechaPartida` datetime(6) NOT NULL,
   `fechaLlegada` datetime(6) NOT NULL,
   `precio` double NOT NULL,
-  `asientos` bigint NOT NULL,
+  `asientos` int NOT NULL,
   `idTipoVuelo` bigint DEFAULT NULL,
   `idAerolinea` bigint DEFAULT NULL,
   PRIMARY KEY (`idVuelo`),
@@ -148,7 +157,7 @@ CREATE TABLE `vuelos` (
   KEY `idAerolinea` (`idAerolinea`),
   CONSTRAINT `vuelos_ibfk_1` FOREIGN KEY (`idTipoVuelo`) REFERENCES `tipo_vuelos` (`idTipoVuelo`),
   CONSTRAINT `vuelos_ibfk_2` FOREIGN KEY (`idAerolinea`) REFERENCES `aerolineas` (`idAerolinea`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,7 +166,7 @@ CREATE TABLE `vuelos` (
 
 LOCK TABLES `vuelos` WRITE;
 /*!40000 ALTER TABLE `vuelos` DISABLE KEYS */;
-INSERT INTO `vuelos` VALUES (5,'EA0001','Bogota','Nueva York','2023-11-01 12:55:02.000000','2023-11-01 18:55:02.000000',21600,5,1,2),(6,'AV0001','Medellin','Nueva York','2023-11-01 12:55:02.000000','2023-11-01 17:55:02.000000',22600,5,1,1),(7,'SA0001','Cali','Nueva York','2023-11-01 12:55:02.000000','2023-11-01 19:55:02.000000',22800,5,1,3),(8,'SA0002','Cali','Medellin','2023-11-02 12:55:02.000000','2023-11-02 15:55:02.000000',2500,5,1,3),(9,'SA0003','Bogota','Medellin','2023-11-02 12:55:02.000000','2023-11-02 15:55:02.000000',2500,5,1,3),(10,'SA0004','Bogota','Medellin','2023-11-02 14:55:02.000000','2023-11-02 15:55:02.000000',2500,5,1,3),(11,'SA0005','Bogota','Medellin','2023-11-02 15:55:02.000000','2023-11-02 16:55:02.000000',2500,5,1,3);
+INSERT INTO `vuelos` VALUES (1,'AV0003','Bogota','Medellin','2023-11-10 18:00:00.000000','2023-11-10 19:00:00.000000',2500,92,2,1),(2,'EA0001','Medellin','Cali','2023-11-10 21:35:00.000000','2023-11-10 22:35:00.000000',3000,100,2,2),(3,'AV0003','Medellin','Cali','2023-11-10 21:35:00.000000','2023-11-10 22:35:00.000000',3000,100,2,1),(4,'AV0005','Cali','Medellin','2023-11-10 23:00:00.000000','2023-11-10 00:00:00.000000',1500,98,1,1);
 /*!40000 ALTER TABLE `vuelos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,4 +266,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-02 11:46:34
+-- Dump completed on 2023-11-10 16:28:49

@@ -354,7 +354,7 @@ public class VueloService {
 
     public ResponseEntity<Object> crearVuelo(VueloModel vuelo){
 
-        VueloModel vuelo1 = this.vueloRepository.crearVuelo(
+        this.vueloRepository.crearVuelo(
                 vuelo.getOrigen(),
                 vuelo.getDestino(),
                 vuelo.getFechaPartida(),
@@ -375,22 +375,35 @@ public class VueloService {
 
     public ResponseEntity<Object> actualizarVuelo(Long idVuelo, VueloModel editVuelo) throws EntityNotFoundException {
 
+        datos = new HashMap<>();
+
         Optional<VueloModel> vueloEncontrado = vueloRepository.findById(idVuelo);
 
         if (vueloEncontrado.isPresent()){
+            if (editVuelo.getAerolinea().getIdAerolinea() == vueloEncontrado.get().getAerolinea().getIdAerolinea()){
+                vueloEncontrado.get().setCodigoVuelo(editVuelo.getCodigoVuelo());
+                vueloEncontrado.get().setOrigen(editVuelo.getOrigen());
+                vueloEncontrado.get().setDestino(editVuelo.getDestino());
+                vueloEncontrado.get().setFechaPartida(editVuelo.getFechaPartida());
+                vueloEncontrado.get().setFechaLlegada(editVuelo.getFechaLlegada());
+                vueloEncontrado.get().setPrecio(editVuelo.getPrecio());
+                vueloEncontrado.get().setAsientos(editVuelo.getAsientos());
+                vueloEncontrado.get().setTipoVuelo(editVuelo.getTipoVuelo());
+                vueloEncontrado.get().setAerolinea(editVuelo.getAerolinea());
+                VueloModel vuelo = this.vueloRepository.save(vueloEncontrado.get());
+            }else{
+                vueloRepository.actualizarVuelo(
+                        idVuelo,
+                        editVuelo.getOrigen(),
+                        editVuelo.getDestino(),
+                        editVuelo.getFechaPartida(),
+                        editVuelo.getFechaLlegada(),
+                        editVuelo.getPrecio(),
+                        editVuelo.getAsientos(),
+                        editVuelo.getTipoVuelo().getIdTipoVuelo(),
+                        editVuelo.getAerolinea().getIdAerolinea());
+            }
 
-            vueloRepository.actualizarVuelo(
-                    idVuelo,
-                    editVuelo.getOrigen(),
-                    editVuelo.getDestino(),
-                    editVuelo.getFechaPartida(),
-                    editVuelo.getFechaLlegada(),
-                    editVuelo.getPrecio(),
-                    editVuelo.getAsientos(),
-                    editVuelo.getTipoVuelo().getIdTipoVuelo(),
-                    editVuelo.getAerolinea().getIdAerolinea());
-
-            datos = new HashMap<>();
             datos.put("message", "el vuelo se actualizo con exito");
 
             return new ResponseEntity<>(
@@ -418,16 +431,16 @@ public class VueloService {
         }
 
     }
-    public VueloModel getFlightByCodigo(String codigoVuelo) throws EntityNotFoundException {
-        Optional<VueloModel> vueloEncontrado = vueloRepository.findByCodigoVuelo(codigoVuelo);
-
-        if (vueloEncontrado.isPresent()) {
-            return vueloEncontrado.get();
-        } else {
-            throw new EntityNotFoundException("Vuelo no encontrado");
-        }
-
-    }
+//    public VueloModel getFlightByCodigo(String codigoVuelo) throws EntityNotFoundException {
+//        Optional<VueloModel> vueloEncontrado = vueloRepository.findByCodigoVuelo(codigoVuelo);
+//
+//        if (vueloEncontrado.isPresent()) {
+//            return vueloEncontrado.get();
+//        } else {
+//            throw new EntityNotFoundException("Vuelo no encontrado");
+//        }
+//
+//    }
 
 
 }

@@ -21,14 +21,12 @@ public class ClienteServiceTest {
 
     @Mock
     private ClienteRepository clienteRepository;
-    private ClienteModel clienteModel;
     private ClienteService clienteService;
 
     @BeforeEach
     public void setUp() {
         this.clienteRepository = mock(ClienteRepository.class);
-        this.clienteModel = mock(ClienteModel.class);
-        this.clienteService = new ClienteService();
+        this.clienteService = new ClienteService(this.clienteRepository);
     }
 
     @Test
@@ -40,7 +38,7 @@ public class ClienteServiceTest {
 
         when(clienteRepository.findAll()).thenReturn(mockClientes);
 
-        ArrayList<ClienteModel> result = clienteService.getPasajeros();
+        List<ClienteModel> result = clienteService.getPasajeros();
 
 
         assertEquals(2, result.size());
