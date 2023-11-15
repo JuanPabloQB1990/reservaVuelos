@@ -41,7 +41,7 @@ El proyecto esta conformado por:
 
 # Explicacion EndPoints
 
-1. **Crear Reservas:** POST /api/vuelos
+1. **Crear Reservas:** POST /api/vuelos/vuelo
 
    Este endpoint se utiliza para crear reservas de vuelos. Se espera que se envíe un JSON con la información del vuelo que se desea reservar, incluyendo origen, destino, fechas, precio, asientos disponibles, tipo de vuelo y aerolínea:
 
@@ -64,7 +64,7 @@ El proyecto esta conformado por:
 
     El JSON describe un nuevo vuelo con información sobre su origen, destino, fechas, precio, asientos disponibles, tipo de vuelo y aerolínea. Al realizar una solicitud POST a este endpoint, se crearía una nueva reserva en la base de datos.
 
-2. Obtener Reserva por ID: GET /api/vuelos/{id}
+2. Obtener vuelo por ID: GET /api/vuelos/vuelo{id}
    
    Este endpoint se utiliza para obtener información detallada sobre una reserva específica. Se realiza una solicitud GET proporcionando el ID de la reserva:
 
