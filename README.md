@@ -41,7 +41,7 @@ El proyecto esta conformado por:
 
 # Explicacion EndPoints
 
-1. **Crear Reservas:** POST /v1/flights
+1. **Crear Reservas:** POST /api/vuelos
 
    Este endpoint se utiliza para crear reservas de vuelos. Se espera que se envíe un JSON con la información del vuelo que se desea reservar, incluyendo origen, destino, fechas, precio, asientos disponibles, tipo de vuelo y aerolínea:
 
@@ -64,11 +64,11 @@ El proyecto esta conformado por:
 
     El JSON describe un nuevo vuelo con información sobre su origen, destino, fechas, precio, asientos disponibles, tipo de vuelo y aerolínea. Al realizar una solicitud POST a este endpoint, se crearía una nueva reserva en la base de datos.
 
-2. Obtener Reserva por ID: GET /v1/flights/{id}
+2. Obtener Reserva por ID: GET /api/vuelos/{id}
    
    Este endpoint se utiliza para obtener información detallada sobre una reserva específica. Se realiza una solicitud GET proporcionando el ID de la reserva:
 
-        "GET http://localhost:8090/v1/flights/5"
+        "GET http://localhost:8090/api/vuelos/5"
    
    La respuesta esperada es un JSON que contiene detalles específicos de la reserva identificada por el ID proporcionado:
 
@@ -85,11 +85,11 @@ El proyecto esta conformado por:
         }"
 
    
-4. Obtener Lista de Reservas por Fechas y Rutas: GET /v1/flights:
+4. Obtener Lista de Reservas por escalas Fechas y Rutas: GET /api/vuelos/criterio:
 
    Este endpoint se utiliza para obtener una lista paginada de reservas según criterios específicos como origen, destino, fecha de partida, etc. Se realiza una solicitud GET proporcionando parámetros de consulta:
 
-       "GET http://localhost:8090/v1/flights?origen=Bogota&destino=Medellin&fechaPartida=2023-11-02&page=0&size=1"
+       "GET http://localhost:8090/api/vuelos/criterio?origen=Bogota&destino=Medellin&fechaPartida=2023-11-02&page=0&size=1"
 
     La respuesta esperada es un JSON que contiene una lista paginada de reservas que cumplen con los criterios proporcionados:
 
@@ -131,4 +131,8 @@ El proyecto esta conformado por:
           "numberOfElements": 1,
           "empty": false
         }"
+
+5. link para visualizar la API documentada
+   
+   http://localhost:8090/swagger-ui/index.html
 
