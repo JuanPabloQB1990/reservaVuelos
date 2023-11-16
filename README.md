@@ -89,7 +89,7 @@ El proyecto esta conformado por:
 
    Este endpoint se utiliza para obtener una lista paginada de reservas según criterios específicos como origen, destino, fecha de partida, etc. Se realiza una solicitud GET proporcionando parámetros de consulta:
 
-       "GET http://localhost:8090/api/vuelos/criterio?origen=Bogota&destino=Medellin&fechaPartida=2023-11-02&page=0&size=1"
+       "GET http://localhost:8090/api/vuelos/busqueda/criterio?origen=Bogota&destino=Medellin&fechaPartida=2023-11-02&page=0&size=1"
 
     La respuesta esperada es un JSON que contiene una lista paginada de reservas que cumplen con los criterios proporcionados:
 
