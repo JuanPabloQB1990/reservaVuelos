@@ -48,6 +48,10 @@ public class ReservacionService {
 
     ReservacionModel reservacion;
 
+    private String generarCodigoReservacion() {
+        return UUID.randomUUID().toString();
+    }
+
     public ResponseEntity<Object> crearReservacion(@RequestBody CrearReservaDto reserva) {
         List<Number> listaIdsVuelosReservar = new ArrayList<>();
         try {
@@ -138,6 +142,8 @@ public class ReservacionService {
                         pasajero.get()
                 );
 
+            return new ResponseEntity<>(datos, HttpStatusCode.valueOf(200));
+
             }
 
             reservacionRepository.save(reservacion);
@@ -174,9 +180,20 @@ public class ReservacionService {
         }
     }
 
-    private String generarCodigoReservacion() {
-        return UUID.randomUUID().toString();
+    public ReservacionModel actualizarReservacion(Long idReservacion, LocalDateTime nuevaFecha) throws EntityNotFoundException {
+        ReservacionModel reservaExistente = reservacionRepository.findById(idReservacion)
+                .orElseThrow(() -> new EntityNotFoundException("Reserva no encontrada con el ID proporcionado: " + idReservacion));
+
+        // Actualizar la fecha de la reserva si se proporciona una nueva fecha
+        if (nuevaFecha != null) {
+            reservaExistente.setFechaReservacion(nuevaFecha);
+        }
+
+        // Guardar la reserva actualizada en la base de datos
+        return reservacionRepository.save(reservaExistente);
     }
+
+
 
     public List<ReservacionModel> obtenerReservacionesPorIdCliente(Long idCliente) throws EntityNotFoundException {
 

@@ -45,6 +45,25 @@ public class ReservacionController {
             return ResponseEntity.badRequest().body("Error al eliminar las reservaciones: " + e.getMessage());
         }
     }
+    @PutMapping("/{idReservacion}")
+    public ResponseEntity<Object> actualizarReservacion(
+            @PathVariable Long idReservacion,
+            @RequestBody ReservacionModel reservacionActualizada) {
+
+        try {
+            ReservacionModel resultadoActualizacion = reservacionService.actualizarReservacion(idReservacion, reservacionActualizada.getFechaReservacion());
+
+            if (resultadoActualizacion != null) {
+                return ResponseEntity.ok(resultadoActualizacion);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body("Error al actualizar la reservación: " + e.getMessage());
+        }
+    }
+
 
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)

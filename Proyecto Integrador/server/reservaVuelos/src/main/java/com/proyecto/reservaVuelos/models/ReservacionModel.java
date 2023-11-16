@@ -3,6 +3,8 @@ package com.proyecto.reservaVuelos.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,9 +40,17 @@ public class ReservacionModel {
     @JoinColumn(name = "idVuelo3")
     private VueloModel vuelo3;
 
+    @NotNull(message = "el numero de asientos del vuelo es obligatorio")
+    @Min(1)
+    private long asientos;
+
     private LocalDateTime fechaReservacion;
 
     private int numeroAsientos;
+
+    public void setFechaReservacion(LocalDateTime nuevaFechaReservacion) {
+        this.fechaReservacion = nuevaFechaReservacion;
+    }
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -88,6 +98,8 @@ public class ReservacionModel {
         this.numeroAsientos = numeroAsientos;
         this.cliente = cliente;
     }
+
+
 
 
 }
